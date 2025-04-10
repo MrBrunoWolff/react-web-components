@@ -5,12 +5,14 @@ import { DayPicker } from "react-day-picker"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 
+export type CalendarProps = React.ComponentProps<typeof DayPicker>
+
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
   ...props
-}: React.ComponentProps<typeof DayPicker>) {
+}: CalendarProps) {
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -58,12 +60,10 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: ({ className, ...props }) => (
-          <ChevronLeft className={cn("size-4", className)} {...props} />
-        ),
-        IconRight: ({ className, ...props }) => (
-          <ChevronRight className={cn("size-4", className)} {...props} />
-        ),
+        // @ts-expect-error - This works according to docs but TS is not recognizing it
+        IconLeft: (props) => <ChevronLeft className={cn("size-4", props.className)} />,
+        // @ts-expect-error - This works according to docs but TS is not recognizing it
+        IconRight: (props) => <ChevronRight className={cn("size-4", props.className)} />,
       }}
       {...props}
     />
