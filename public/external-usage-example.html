@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>External Usage Example</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    h1, h2, h3, h4 {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    
+    section {
+      margin-bottom: 2rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+    }
+    
+    .demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    code {
+      background-color: #f1f5f9;
+      padding: 0.5rem;
+      border-radius: 0.25rem;
+      display: block;
+      margin: 1rem 0;
+      white-space: pre-wrap;
+    }
+    
+    /* Native button style */
+    .native-button {
+      padding: 0 16px;
+      height: 36px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      background-color: hsl(262.1 83.3% 57.8%);
+      color: white;
+      border: none;
+      font-family: inherit;
+      line-height: 1;
+    }
+    
+    .note {
+      background-color: #fef9c3;
+      border-left: 4px solid #eab308;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 0 0.5rem 0.5rem 0;
+    }
+    
+    .status-section {
+      background-color: #f8fafc;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-top: 2rem;
+    }
+    
+    #component-status {
+      margin-top: 1rem;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+    
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    
+    .comparison > div {
+      padding: 1rem;
+      background-color: #f8fafc;
+      border-radius: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>External Usage Example</h1>
+  <p>This demonstrates how to use the React Web Components in a non-React application.</p>
+  
+  <div class="note">
+    <h4>Important Note About Dependencies</h4>
+    <p>This library now <strong>bundles React, ReactDOM and all necessary styles</strong> so you don't need to include them separately. The web components can be used directly in any web application without additional dependencies.</p>
+  </div>
+  
+  <section>
+    <h2>Installation</h2>
+    <p>Include the UMD script:</p>
+    <code>&lt;script src="path/to/react-web-components.umd.js"&gt;&lt;/script&gt;</code>
+    
+    <p>Or you can use the ES module version in a modern application:</p>
+    <code>import 'path/to/react-web-components.es.js';</code>
+  </section>
+  
+  <section>
+    <h2>Button Component</h2>
+    <p>Use the <code>&lt;ui-button&gt;</code> component as a standard HTML element:</p>
+    
+    <h3>Comparison: Web Component vs Native HTML</h3>
+    <div class="comparison">
+      <div>
+        <h4>Web Component Button</h4>
+        <ui-button id="wc-button">Web Component Button</ui-button>
+      </div>
+      <div>
+        <h4>Native HTML Button</h4>
+        <button class="native-button">Native HTML Button</button>
+      </div>
+    </div>
+    
+    <h3>Button Variants</h3>
+    <div class="demo-row">
+      <ui-button variant="default">Default</ui-button>
+      <ui-button variant="destructive">Destructive</ui-button>
+      <ui-button variant="outline">Outline</ui-button>
+      <ui-button variant="secondary">Secondary</ui-button>
+      <ui-button variant="ghost">Ghost</ui-button>
+      <ui-button variant="link">Link</ui-button>
+    </div>
+    
+    <h3>Button Sizes</h3>
+    <div class="demo-row">
+      <ui-button size="sm">Small</ui-button>
+      <ui-button size="default">Default</ui-button>
+      <ui-button size="lg">Large</ui-button>
+    </div>
+    
+    <h3>Disabled Button</h3>
+    <div class="demo-row">
+      <ui-button disabled="true">Disabled Button</ui-button>
+    </div>
+  </section>
+  
+  <section>
+    <h2>Event Handling</h2>
+    <p>Add event listeners just like with regular HTML elements:</p>
+    
+    <code>const button = document.querySelector('ui-button#example-button');
+button.addEventListener('click', () => {
+  alert('Button clicked!');
+});</code>
+    
+    <div class="demo-row">
+      <ui-button id="example-button">Click Me</ui-button>
+    </div>
+    <div id="click-result"></div>
+  </section>
+  
+  <!-- Diagnostics section to show component status -->
+  <section class="status-section">
+    <h2>Component Status</h2>
+    <p>This section shows diagnostic information about the web components:</p>
+    <div id="component-status">Checking component status...</div>
+    
+    <h3>Manual Rendering Test</h3>
+    <div id="manual-target"></div>
+    <button onclick="manuallyRenderButton()">Manually Render Using ReactDOM</button>
+  </section>
+  
+  <!-- Load our web components UMD bundle (React and styles are now bundled within) -->
+  <script src="./dist/web-components/react-web-components.umd.js"></script>
+  
+  <script>
+    // Wait for the document to be fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      // Add event listener to the example button
+      const exampleButton = document.querySelector('ui-button#example-button');
+      const clickResult = document.getElementById('click-result');
+      const componentStatus = document.getElementById('component-status');
+      
+      // Display component status
+      const hasCustomElements = !!window.customElements;
+      const isButtonDefined = hasCustomElements && !!customElements.get('ui-button');
+      const firstButtonElement = document.querySelector('ui-button');
+      
+      let statusText = `Custom Elements API: ${hasCustomElements ? 'Available' : 'Not Available'}\n`;
+      statusText += `ui-button defined: ${isButtonDefined ? 'Yes' : 'No'}\n`;
+      
+      if (firstButtonElement) {
+        statusText += `Button element found: Yes\n`;
+        statusText += `Button children: ${firstButtonElement.childElementCount} child nodes\n`;
+        
+        // Check if button has shadow root
+        const hasShadow = !!firstButtonElement.shadowRoot;
+        statusText += `Has Shadow DOM: ${hasShadow ? 'Yes' : 'No'}\n`;
+        
+        if (hasShadow) {
+          statusText += `Shadow root mode: ${firstButtonElement.shadowRoot.mode}\n`;
+          statusText += `Shadow root children: ${firstButtonElement.shadowRoot.childElementCount}\n`;
+        }
+        
+        // Check computed styles
+        const styles = window.getComputedStyle(firstButtonElement);
+        statusText += `Button display: ${styles.display}\n`;
+        statusText += `Button visibility: ${styles.visibility}\n`;
+        statusText += `Button opacity: ${styles.opacity}\n`;
+        
+        // Check if using inline styles (from our component)
+        const hasInlineStyles = firstButtonElement.hasAttribute('style');
+        statusText += `Has inline styles: ${hasInlineStyles ? 'Yes' : 'No'}\n`;
+        
+        // If it has children, check the first child (should be a button)
+        const firstChild = firstButtonElement.firstElementChild;
+        if (firstChild) {
+          statusText += `First child tag: ${firstChild.tagName}\n`;
+          const childStyles = window.getComputedStyle(firstChild);
+          statusText += `Child background-color: ${childStyles.backgroundColor}\n`;
+          statusText += `Child color: ${childStyles.color}\n`;
+        }
+        
+        // Try to force view
+        setTimeout(() => {
+          if (firstButtonElement.shadowRoot) {
+            statusText += `\nShadow DOM Content:\n${firstButtonElement.shadowRoot.innerHTML}\n`;
+            componentStatus.textContent = statusText;
+          }
+        }, 1000);
+      } else {
+        statusText += `Button element not found\n`;
+      }
+      
+      componentStatus.textContent = statusText;
+      
+      if (exampleButton) {
+        let clickCount = 0;
+        
+        exampleButton.addEventListener('click', () => {
+          clickCount++;
+          clickResult.textContent = `Button clicked ${clickCount} time${clickCount === 1 ? '' : 's'}!`;
+        });
+      }
+    });
+    
+    // Function to manually render a button (no longer needs React globals)
+    function manuallyRenderButton() {
+      const target = document.getElementById('manual-target');
+      target.textContent = 'Manual rendering disabled - React is now bundled with the web components';
+    }
+  </script>
+</body>
+</html> 

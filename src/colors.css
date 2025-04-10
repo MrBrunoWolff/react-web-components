@@ -1,0 +1,33 @@
+/* Explicit color definitions for testing */
+
+.bg-red-500 {
+  background-color: #ef4444 !important;
+}
+
+.bg-blue-500 {
+  background-color: #3b82f6 !important;
+}
+
+.bg-green-500 {
+  background-color: #22c55e !important;
+}
+
+.bg-yellow-500 {
+  background-color: #eab308 !important;
+}
+
+.text-purple-600 {
+  color: #9333ea !important;
+}
+
+.text-gray-600 {
+  color: #4b5563 !important;
+}
+
+.hover\:bg-blue-700:hover {
+  background-color: #1d4ed8 !important;
+}
+
+.hover\:bg-green-700:hover {
+  background-color: #15803d !important;
+} 

@@ -1,0 +1,21 @@
+/* Web component theme variables - used to pass theme to shadow DOM */
+:root {
+  /* Pass CSS variables from the root to variables accessible in shadow DOM */
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-destructive: var(--destructive);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+}
+
+/* Basic styling for web component wrapper */
+ui-button {
+  display: inline-flex;
+  vertical-align: middle;
+} 
