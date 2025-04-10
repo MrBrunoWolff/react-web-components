@@ -124,12 +124,12 @@
   "description": "Shadcn UI components wrapped as Web Components for use in any framework",
   "repository": {
     "type": "git",
-    "url": "https://github.com/brunowolff/react-web-components.git"
+    "url": "https://github.com/MrBrunoWolff/react-web-components.git"
   },
   "author": "Bruno Wolff",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/brunowolff/react-web-components/issues"
+    "url": "https://github.com/MrBrunoWolff/react-web-components/issues"
   },
-  "homepage": "https://github.com/brunowolff/react-web-components#readme"
+  "homepage": "https://github.com/MrBrunoWolff/react-web-components#readme"
 }

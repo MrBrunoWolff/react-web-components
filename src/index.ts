@@ -5,9 +5,8 @@
  * Import from this file to use the web components in your application.
  */
 
-// Import styles for the components
-import './index.css';
-import './colors.css';
+// NOTE: CSS files are imported in the main entry points (not here) to avoid TypeScript errors
+// The CSS is bundled separately and should be imported by the consumer
 
 // Import and re-export the Button Web Component
 import { ButtonWebComponent } from './components/ui/button-wc';

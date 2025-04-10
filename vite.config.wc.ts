@@ -26,7 +26,7 @@ export default defineConfig({
   build: {
     outDir: 'dist/web-components',
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: resolve(__dirname, 'src/styles.js'),
       name: 'ReactWebComponents',
       formats: ['es', 'umd'],
       fileName: (format) => `react-web-components.${format}.js`,
