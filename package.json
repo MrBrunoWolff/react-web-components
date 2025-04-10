@@ -1,6 +1,6 @@
 {
-  "name": "@brunowolff/react-web-components",
-  "version": "0.0.1",
+  "name": "@mrbrunowolff/react-web-components",
+  "version": "1.0.0",
   "type": "module",
   "main": "dist/web-components/react-web-components.umd.js",
   "module": "dist/web-components/react-web-components.es.js",
