@@ -10,10 +10,12 @@
 
 // Import and re-export the Button Web Component
 import { ButtonWebComponent } from './components/ui/button-wc';
+import { FlexLayoutWebComponent } from './components/ui-extra/flexlayout-wc';
 
 // Export all web components
 export {
-  ButtonWebComponent
+  ButtonWebComponent,
+  FlexLayoutWebComponent,
 };
 
 // Export a helper function to register all components
@@ -26,6 +28,9 @@ export function registerAllComponents() {
   // Register each component if it's not already registered
   if (!customElements.get('ui-button')) {
     customElements.define('ui-button', ButtonWebComponent);
+  }
+  if (!customElements.get('ui-flexlayout')) {
+    customElements.define('ui-flexlayout', FlexLayoutWebComponent as unknown as CustomElementConstructor);
   }
   
   // Add more component registrations here as they're added

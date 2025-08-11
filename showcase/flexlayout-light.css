@@ -1,0 +1,3 @@
+/* Minimal light theme import proxy. Consumers can replace with full CSS. */
+@import url("../node_modules/flexlayout-react/style/light.css");
+

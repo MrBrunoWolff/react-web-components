@@ -6,5 +6,6 @@
  */
 
 export { ButtonWebComponent } from "./ui/button-wc"
+export { FlexLayoutWebComponent } from "./ui-extra/flexlayout-wc"
 
 // Export more web components here as they are added 

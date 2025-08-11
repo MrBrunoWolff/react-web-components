@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React Web Components Showcase</title>
+    <link rel="stylesheet" href="/showcase/reset.css" />
+    <link rel="stylesheet" href="/showcase/flexlayout-light.css" />
+    <style>
+      body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji"; margin: 0; padding: 20px; }
+      .container { max-width: 1200px; margin: 24px auto; display: flex; flex-direction: column; gap: 24px; }
+      h1 { margin: 0 0 8px; text-align: center; }
+      h2 { margin: 0 0 8px; font-size: 1rem; }
+      .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+      .panel { border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 8px; min-height: 460px; background: #fff; }
+      #flex-react, #flex-wc {
+        height: 400px;
+        flex: 1 0 400px;
+        position: relative;
+        overflow: hidden;
+        isolation: isolate; /* ensure absolute children don't escape */
+      }
+      ui-flexlayout.flexlayout-host, #flex-react { border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; }
+      ui-flexlayout { display: block; width: 100%; box-sizing: border-box; }
+    </style>
+    <script type="module" src="/showcase/main.tsx"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>React Web Components Showcase</h1>
+
+      <div class="row">
+        <div class="panel">
+          <h2>Button (React)</h2>
+          <div id="button-react"></div>
+        </div>
+        <div class="panel">
+          <h2>Button (Web Component)</h2>
+          <!-- The WC is defined by importing our dist bundle in main.tsx -->
+          <div style="display:flex; gap:12px; flex-wrap:wrap">
+            <ui-button id="button-wc" variant="default">Default</ui-button>
+            <ui-button variant="secondary">Secondary</ui-button>
+            <ui-button variant="destructive">Delete</ui-button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="panel">
+          <h2>FlexLayout (React)</h2>
+          <div id="flex-react"></div>
+        </div>
+        <div class="panel">
+          <h2>FlexLayout (Web Component)</h2>
+          <ui-flexlayout id="flex-wc"></ui-flexlayout>
+        </div>
+      </div>
+    </div>
+  </body>
+  </html>
+
+
