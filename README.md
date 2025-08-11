@@ -1,75 +1,110 @@
-# React Web Components
+# React Web Components Monorepo
 
-A library of [shadcn/ui](https://ui.shadcn.com/) components wrapped as Web Components for use in any framework or vanilla JavaScript application. Each component is completely self-contained with built-in styling - no external CSS framework required.
+Self-contained shadcn/ui components wrapped as Web Components for use in any framework - no external CSS dependencies required.
 
-## Features
+## 📁 Monorepo Structure
 
-- 🚀 **Self-contained components** - No Tailwind CSS or external dependencies required
-- 🎨 **Pixel-perfect shadcn/ui styling** - Matches the official designs exactly
-- ⚛️ **Dual usage** - Use as React components OR Web Components
-- 🌐 **Framework agnostic** - Works with Vue, Angular, Svelte, vanilla JS, or any framework
-- 🎯 **TypeScript support** - Full type safety for React usage
-- 🔧 **Advanced layouts** - Includes FlexLayout for complex docking interfaces
-- 🎨 **Themeable** - Customize colors with CSS variables
+This monorepo contains three packages:
 
-## Installation
+- **`packages/react-web-components`** - The main component library
+- **`packages/showcase-react`** - React showcase using Vite + React
+- **`packages/showcase-wc`** - Pure Web Components showcase using Lit
+
+## ✨ Features
+
+### Core Features
+- **Self-contained components**: No need for Tailwind CSS setup in your consuming app
+- **Pixel-perfect styling**: All components look exactly like shadcn/ui reference
+- **Dual usage**: Use as React components OR Web Components
+- **Framework agnostic**: Works with Vue, Angular, vanilla HTML, or any framework
+- **TypeScript support**: Full type safety for React usage
+- **Organized structure**: Clean separation between React components (`ui/`) and Web Components (`wc-ui/`)
+- **Theming support**: CSS variables for easy customization
+
+### Third-party Integrations
+- **FlexLayout included**: Advanced docking layout manager for complex UIs
+- **Third-party components**: Dedicated folders for external library integrations
+
+## 🚀 Quick Start
+
+### View Live Showcases
+
+Clone the repository and start the showcases:
 
 ```bash
+# Install dependencies for all packages (Bun workspaces handles everything!)
+bun install
+
+# Start React showcase (Vite + React)
+bun run showcase:react
+# Visit http://localhost:3000
+
+# Start Web Components showcase (Lit)
+bun run showcase:wc  
+# Visit http://localhost:3001
+```
+
+### Build Everything
+
+```bash
+# Build all packages
+bun run build
+
+# Build only the main library
+bun run build:lib
+```
+
+## 📦 Installation
+
+```bash
+npm install @mrbrunowolff/react-web-components
+# or
+yarn add @mrbrunowolff/react-web-components
+# or
 bun add @mrbrunowolff/react-web-components
 ```
 
-## Quick Start
+> **Note**: React and React-DOM are included as dependencies since the Web Components are built using React internally. No additional React installation is needed.
 
-### Try the showcase
+## 🎯 Usage
 
-```bash
-bun run showcase
-```
+### Web Components (Recommended)
 
-This opens a live demo showing both React and Web Component versions side-by-side.
-
-## Usage
-
-### Option 1: Web Components (Recommended for most apps)
-
-Perfect for any framework or vanilla JavaScript. Components are completely self-contained.
+For any frontend framework or vanilla HTML/JS:
 
 #### Vanilla HTML
 ```html
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Web Components Demo</title>
+  <!-- Include FlexLayout styles for proper layout rendering -->
+  <link rel="stylesheet" href="https://unpkg.com/@mrbrunowolff/react-web-components/styles/flexlayout-light.css">
+  <script type="module" src="https://unpkg.com/@mrbrunowolff/react-web-components"></script>
 </head>
 <body>
-  <!-- Use the components directly -->
-  <ui-button variant="default">Click Me</ui-button>
-  <ui-button variant="destructive">Delete</ui-button>
-  <ui-button variant="outline">Outline</ui-button>
+  <!-- Button examples -->
+  <ui-button variant="default">Click me</ui-button>
+  <ui-button variant="secondary" size="lg">Large Secondary</ui-button>
+  <ui-button variant="destructive" disabled>Disabled Delete</ui-button>
   
-  <!-- FlexLayout for advanced docking -->
-  <ui-flexlayout id="layout"></ui-flexlayout>
-
-  <!-- Import the JavaScript (no CSS needed - styles are built-in) -->
-  <script src="node_modules/@mrbrunowolff/react-web-components/dist/web-components/react-web-components.umd.js"></script>
+  <!-- FlexLayout example -->
+  <ui-flexlayout id="my-layout" theme="light"></ui-flexlayout>
   
   <script>
     // Configure FlexLayout
-    document.getElementById('layout').modelJson = {
-      global: {},
-      borders: [],
+    const layout = document.getElementById('my-layout');
+    layout.modelJson = {
+      global: { tabEnableClose: true },
       layout: {
-        type: 'row',
-        children: [
-          {
-            type: 'tabset',
-            children: [
-              { type: 'tab', name: 'Welcome', component: 'welcome' }
-            ]
-          }
-        ]
+        type: "row",
+        children: [{
+          type: "tabset",
+          children: [{
+            type: "tab",
+            name: "My Panel",
+            component: "panel"
+          }]
+        }]
       }
     };
   </script>
@@ -77,280 +112,287 @@ Perfect for any framework or vanilla JavaScript. Components are completely self-
 </html>
 ```
 
-#### React/Next.js/Vite apps
-```js
-// Import and register the web components
-import '@mrbrunowolff/react-web-components';
+#### React/Next.js/Vite
+```tsx
+import '@mrbrunowolff/react-web-components'
+import '@mrbrunowolff/react-web-components/styles/flexlayout-light.css'
 
-// Then use them in JSX
-function App() {
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'ui-button': any
+      'ui-flexlayout': any
+    }
+  }
+}
+
+export default function App() {
   return (
     <div>
-      <ui-button variant="default">Click Me</ui-button>
-      <ui-button variant="destructive">Delete</ui-button>
+      <ui-button variant="default">React with WC</ui-button>
+      <ui-flexlayout theme="dark" />
     </div>
-  );
+  )
 }
 ```
 
-#### Vue apps
+#### Vue 3
 ```vue
 <template>
   <div>
-    <ui-button variant="default">Click Me</ui-button>
-    <ui-button variant="destructive">Delete</ui-button>
+    <ui-button variant="secondary" @click="handleClick">Vue Button</ui-button>
+    <ui-flexlayout ref="layout" theme="light" />
   </div>
 </template>
 
 <script setup>
-// Import and register the web components
-import '@mrbrunowolff/react-web-components';
+import '@mrbrunowolff/react-web-components'
+import '@mrbrunowolff/react-web-components/styles/flexlayout-light.css'
+import { ref, onMounted } from 'vue'
+
+const layout = ref()
+
+const handleClick = () => {
+  console.log('Button clicked!')
+}
+
+onMounted(() => {
+  layout.value.modelJson = {
+    // your layout config
+  }
+})
 </script>
 ```
 
-#### Angular apps
+#### Angular
 ```typescript
-// In main.ts or app.module.ts
-import '@mrbrunowolff/react-web-components';
+// app.component.ts
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import '@mrbrunowolff/react-web-components'
+import '@mrbrunowolff/react-web-components/styles/flexlayout-light.css'
 
-// Add CUSTOM_ELEMENTS_SCHEMA to your module
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
-@NgModule({
+@Component({
+  selector: 'app-root',
+  template: `
+    <ui-button variant="outline" (click)="onClick()">Angular Button</ui-button>
+    <ui-flexlayout #layout theme="dark"></ui-flexlayout>
+  `,
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
+export class AppComponent {
+  onClick() {
+    console.log('Clicked!')
+  }
+}
 ```
 
-```html
-<!-- In your templates -->
-<ui-button variant="default">Click Me</ui-button>
-<ui-button variant="destructive">Delete</ui-button>
-```
+### React Components
 
-### Option 2: React Components (For React apps)
-
-Use the React components directly for full TypeScript support and React integration.
+For React applications that want to use the components directly:
 
 ```tsx
-import { Button } from '@mrbrunowolff/react-web-components/components/ui/button';
-import { FlexLayout } from '@mrbrunowolff/react-web-components/components/ui-extra/flexlayout';
+import { Button } from '@mrbrunowolff/react-web-components/components/ui/button'
+import { FlexLayout } from '@mrbrunowolff/react-web-components/components/ui/third-party/flexlayout'
+import '@mrbrunowolff/react-web-components/styles/flexlayout-light.css'
 
-function App() {
-  const model = {
-    global: {},
-    borders: [],
+export default function App() {
+  const layoutModel = {
+    global: { tabEnableClose: true },
     layout: {
-      type: 'row',
-      children: [
-        {
-          type: 'tabset',
-          children: [
-            { type: 'tab', name: 'Welcome', component: 'welcome' }
-          ]
-        }
-      ]
+      type: "row", 
+      children: [{
+        type: "tabset",
+        children: [{
+          type: "tab",
+          name: "Panel 1",
+          component: "text"
+        }]
+      }]
     }
-  };
+  }
+
+  const factory = (node) => {
+    return <div>Panel content: {node.getName()}</div>
+  }
 
   return (
     <div>
-      <Button variant="default">Default</Button>
-      <Button variant="secondary">Secondary</Button>
-      <Button variant="destructive">Delete</Button>
+      <Button variant="default" size="lg">
+        React Button
+      </Button>
       
       <FlexLayout 
-        modelJson={model}
-        factory={(node) => <div>Content for {node.getName()}</div>}
+        modelJson={layoutModel}
+        factory={factory}
       />
     </div>
-  );
+  )
 }
 ```
 
-## Available Components
+## 🧩 Available Components
 
-### Button Component
+The library is organized into two main categories:
 
-Available as `<ui-button>` (Web Component) or `Button` (React component).
+- **React Components** (`ui/`): For direct React usage
+- **Web Components** (`wc-ui/`): For framework-agnostic usage
 
-**Web Component Usage:**
-```html
-<ui-button variant="default">Click Me</ui-button>
-<ui-button variant="secondary" size="sm">Small Button</ui-button>
-<ui-button variant="destructive" disabled>Disabled</ui-button>
-```
+Both categories include:
+- **Core components**: Standard UI components (Button, etc.)
+- **Third-party components**: External library integrations (FlexLayout)
 
-**React Component Usage:**
-```tsx
-<Button variant="default">Click Me</Button>
-<Button variant="secondary" size="sm">Small Button</Button>
-<Button variant="destructive" disabled>Disabled</Button>
-```
+### Button
 
-**Properties:**
+A versatile button component with multiple variants and sizes.
 
-| Property    | Type                                                            | Default     | Description                          |
-|-------------|----------------------------------------------------------------|-------------|--------------------------------------|
-| variant     | 'default' \| 'destructive' \| 'outline' \| 'secondary' \| 'ghost' \| 'link' | 'default'   | The visual style of the button       |
-| size        | 'default' \| 'sm' \| 'lg' \| 'icon'                             | 'default'   | The size of the button               |
-| disabled    | boolean                                                         | false       | Whether the button is disabled       |
+**Web Component**: `<ui-button>`
 
-### FlexLayout Component
+**Props/Attributes**:
+- `variant`: `"default" | "secondary" | "destructive" | "outline" | "ghost" | "link"`
+- `size`: `"default" | "sm" | "lg" | "icon"`
+- `disabled`: `boolean`
+- `class`/`className`: `string`
 
-Advanced docking layout component based on [caplin/FlexLayout](https://github.com/caplin/FlexLayout).
+**Events**: Dispatches standard `click` events
 
-**Web Component Usage:**
-```html
-<ui-flexlayout id="layout"></ui-flexlayout>
-<script>
-  document.getElementById('layout').modelJson = {
-    global: {},
-    borders: [],
-    layout: {
-      type: 'row',
-      children: [
-        {
-          type: 'tabset', 
-          children: [
-            { type: 'tab', name: 'Tab 1', component: 'panel1' },
-            { type: 'tab', name: 'Tab 2', component: 'panel2' }
-          ]
-        }
-      ]
-    }
-  };
-</script>
-```
+### FlexLayout
 
-**React Component Usage:**
-```tsx
-import type { IJsonModel } from 'flexlayout-react';
+A powerful docking layout manager for complex interfaces.
 
-const model: IJsonModel = {
-  global: {},
-  borders: [],
-  layout: {
-    type: 'row',
-    children: [
-      {
-        type: 'tabset',
-        children: [
-          { type: 'tab', name: 'Tab 1', component: 'panel1' },
-          { type: 'tab', name: 'Tab 2', component: 'panel2' }
-        ]
-      }
-    ]
-  }
-};
+**Web Component**: `<ui-flexlayout>`
 
-<FlexLayout 
-  modelJson={model}
-  factory={(node) => {
-    switch (node.getComponent()) {
-      case 'panel1': return <div>Panel 1 Content</div>;
-      case 'panel2': return <div>Panel 2 Content</div>;
-      default: return <div>{node.getName()}</div>;
-    }
-  }}
-/>
-```
+**Props/Attributes**:
+- `theme`: `"light" | "dark"`
+- `modelJson`: Layout configuration object (set via JavaScript property)
 
-**Properties:**
+**React Props** (additional):
+- `factory`: `(node: TabNode) => React.ReactNode` - Function to render tab content
+- `onAction`: `(action: Action) => void` - Handle layout actions
 
-| Property    | Type                                                            | Default     | Description                          |
-|-------------|----------------------------------------------------------------|-------------|--------------------------------------|
-| modelJson   | IJsonModel                                                      | required    | FlexLayout model configuration       |
-| factory     | (node: TabNode) => React.ReactNode                             | optional    | Function to render tab content (React only) |
-| onAction    | (action: Action) => Action \| undefined                        | optional    | Action interceptor                   |
-| className   | string                                                          | optional    | Additional CSS classes               |
-| theme       | 'light' \| 'dark'                                              | 'light'     | Theme (Web Component only)           |
+## 🎨 Theming
 
-## Theming
-
-Components are designed to work out-of-the-box with no configuration. However, you can customize colors by overriding CSS variables:
+Components use CSS variables for easy theming:
 
 ```css
 :root {
-  /* Primary colors (default button) */
-  --color-primary: oklch(0.205 0 0); /* Dark slate */
-  --color-primary-foreground: oklch(0.985 0 0); /* White */
-  
-  /* Secondary colors */
-  --color-secondary: oklch(0.97 0 0); /* Light gray */
-  --color-secondary-foreground: oklch(0.205 0 0); /* Dark slate */
-  
-  /* Destructive colors */
-  --color-destructive: oklch(0.577 0.245 27.325); /* Red */
-  
-  /* Border and accents */
-  --color-border: oklch(0.922 0 0); /* Light border */
-  --color-accent: oklch(0.97 0 0); /* Hover backgrounds */
-  --color-accent-foreground: oklch(0.205 0 0); /* Hover text */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 84% 4.9%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 84% 4.9%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 222.2 84% 4.9%;
+  --radius: 0.5rem;
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  /* ... other dark theme variables */
 }
 ```
 
-**Custom theme example:**
-```css
-/* Blue theme */
-:root {
-  --color-primary: #3b82f6; /* Blue */
-  --color-primary-foreground: #ffffff;
-  --color-secondary: #f1f5f9;
-  --color-secondary-foreground: #1e293b;
-  --color-destructive: #ef4444; /* Red */
-}
-```
+Apply themes by setting the `data-theme` attribute on a parent element or use the `theme` attribute on individual components.
 
-## Development
+## 🛠 Development
 
-### Prerequisites
-
-- Bun 1.0+
-
-### Setup
-
-1. Clone the repository:
+This project uses **Bun** as the package manager and runtime:
 
 ```bash
-git clone https://github.com/brunowolff/react-web-components.git
-cd react-web-components
-```
-
-2. Install dependencies:
-
-```bash
+# Install dependencies for all packages (Bun workspaces handles everything!)
 bun install
-```
 
-3. Start the development server:
+# Start React showcase (Vite + React)
+bun run showcase:react
 
-```bash
-bun run dev
-```
+# Start Web Components showcase (Lit)
+bun run showcase:wc
 
-### Building
+# Build all packages
+bun run build
 
-```bash
-# Build the web components for distribution
+# Build only the main library
 bun run build:lib
 
-# Run the showcase demo
-bun run showcase
+# Run tests across all packages
+bun run test
 
-# Build types only
-bun run build:types
+# Format and lint all packages with Biome
+bun run format     # Format all files
+bun run lint       # Lint and fix issues
+bun run check      # Format + lint + fix everything
 ```
 
-### Testing
+### Root Scripts
 
-```bash
-# Run unit tests
-bun test
+- `bun install` - Install dependencies for all packages (Bun workspaces handles everything automatically!)
+- `bun run bootstrap` - Alias for `bun install` (optional)
+- `bun run dev` - Start development servers for all packages
+- `bun run build` - Build all packages
+- `bun run build:lib` - Build the main component library
+- `bun run showcase:react` - Start React showcase (port 3000)
+- `bun run showcase:wc` - Start Web Components showcase (port 3001)
+- `bun run format` - Format all files with Biome
+- `bun run lint` - Lint and fix issues with Biome  
+- `bun run check` - Format + lint + fix everything with Biome
+- `bun run test` - Test all packages
+- `bun run clean` - Clean all build artifacts
 
-# Run end-to-end tests
-bun run test:e2e
+### Package Structure
+
+```
+packages/
+├── react-web-components/    # Main component library
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── ui/          # React UI components (shadcn/ui)
+│   │   │   │   ├── third-party/  # Third-party React components (FlexLayout)
+│   │   │   │   ├── button.tsx
+│   │   │   │   └── [other shadcn components]...
+│   │   │   ├── wc-ui/       # Web Components
+│   │   │   │   ├── third-party/  # Third-party Web Components
+│   │   │   │   │   └── flexlayout.tsx
+│   │   │   │   ├── button.tsx
+│   │   │   │   └── index.ts
+│   │   │   └── web-components.ts  # WC exports
+│   │   ├── styles/          # CSS files (FlexLayout themes)
+│   │   └── index.ts         # Main export
+│   ├── showcase/            # Legacy showcase (being deprecated)
+│   └── tests/               # Test files
+├── showcase-react/          # Vite + React showcase
+│   └── src/                 # React app source
+└── showcase-wc/             # Lit Web Components showcase
+    └── src/                 # Lit components and main
 ```
 
-## License
+## 🤝 Contributing
 
-MIT
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes in the appropriate package
+4. Add tests for new functionality
+5. Run the test suite: `bun run test`
+6. Test both showcases: `bun run showcase:react` and `bun run showcase:wc`
+7. Submit a pull request
+
+## 📜 License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## 🔗 Links
+
+- [shadcn/ui](https://ui.shadcn.com/) - Original component library
+- [FlexLayout](https://github.com/caplin/FlexLayout) - Advanced layout manager
+- [Vite](https://vitejs.dev/) - React showcase build tool
+- [Lit](https://lit.dev/) - Web Components showcase framework
+- [Bun](https://bun.sh/) - Fast JavaScript runtime and package manager
+- [Biome](https://biomejs.dev/) - Fast formatter and linter for web projects
