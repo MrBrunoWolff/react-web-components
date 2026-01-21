@@ -1,7 +1,7 @@
 {
   "name": "@mrbrunowolff/react-web-components-monorepo",
   "version": "1.0.0",
-  "private": true,
+  "description": "Monorepo for self-contained React components wrapped as Web Components",
   "type": "module",
   "workspaces": [
     "packages/*"
@@ -42,7 +42,6 @@
     "flexlayout",
     "self-contained"
   ],
-  "description": "Monorepo for self-contained shadcn/ui components wrapped as Web Components",
   "repository": {
     "type": "git",
     "url": "https://github.com/MrBrunoWolff/react-web-components.git"
