@@ -252,7 +252,7 @@ button.addEventListener('click', () => {
     });
     
     // Function to manually render a button (no longer needs React globals)
-    function manuallyRenderButton() {
+    function _manuallyRenderButton() {
       const target = document.getElementById('manual-target');
       target.textContent = 'Manual rendering disabled - React is now bundled with the web components';
     }

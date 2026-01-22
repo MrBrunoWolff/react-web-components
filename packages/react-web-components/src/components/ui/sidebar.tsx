@@ -25,7 +25,36 @@ const SIDEBAR_WIDTH = '16rem';
 const SIDEBAR_WIDTH_MOBILE = '18rem';
 const SIDEBAR_WIDTH_ICON = '3rem';
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
+function setSidebarCookie(name: string, value: string, maxAge: number) {
+  if (typeof document === 'undefined') return;
 
+  // Use Cookie Store API if available
+  if ('cookieStore' in window) {
+    (
+      window.cookieStore as {
+        set: (options: {
+          name: string;
+          value: string;
+          path: string;
+          maxAge: number;
+        }) => Promise<void>;
+      }
+    )
+      .set({ name, value, path: '/', maxAge })
+      .catch(() => {
+        // Silently fail if cookies are disabled
+      });
+    return;
+  }
+
+  // Fallback to document.cookie
+  const cookie = `${name}=${value}; path=/; max-age=${maxAge}`;
+  try {
+    document.cookie = cookie;
+  } catch {
+    // Silently fail if cookies are disabled
+  }
+}
 type SidebarContextProps = {
   state: 'expanded' | 'collapsed';
   open: boolean;
@@ -77,7 +106,7 @@ function SidebarProvider({
       }
 
       // This sets the cookie to keep the sidebar state.
-      document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
+      setSidebarCookie(SIDEBAR_COOKIE_NAME, openState.toString(), SIDEBAR_COOKIE_MAX_AGE);
     },
     [setOpenProp, open]
   );

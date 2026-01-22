@@ -56,4 +56,4 @@ declare module '*.gif' {
 
 // Extend window with custom properties
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-type Window = {};
+type Window = Record<string, never>;

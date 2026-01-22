@@ -66,16 +66,21 @@ function ChartContainer({
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(([, config]) => config.theme || config.color);
 
-  if (!colorConfig.length) {
-    return null;
-  }
+  React.useEffect(() => {
+    if (!colorConfig.length) return;
 
-  return (
-    <style
-      dangerouslySetInnerHTML={{
-        __html: Object.entries(THEMES)
-          .map(
-            ([theme, prefix]) => `
+    const styleId = `chart-style-${id}`;
+    let styleElement = document.getElementById(styleId) as HTMLStyleElement | null;
+
+    if (!styleElement) {
+      styleElement = document.createElement('style');
+      styleElement.id = styleId;
+      document.head.appendChild(styleElement);
+    }
+
+    const cssText = Object.entries(THEMES)
+      .map(
+        ([theme, prefix]) => `
 ${prefix} [data-chart=${id}] {
 ${colorConfig
   .map(([key, itemConfig]) => {
@@ -85,11 +90,20 @@ ${colorConfig
   .join('\n')}
 }
 `
-          )
-          .join('\n'),
-      }}
-    />
-  );
+      )
+      .join('\n');
+
+    styleElement.textContent = cssText;
+
+    return () => {
+      const element = document.getElementById(styleId);
+      if (element) {
+        element.remove();
+      }
+    };
+  }, [id, colorConfig]);
+
+  return null;
 };
 
 const ChartTooltip = RechartsPrimitive.Tooltip;
@@ -100,8 +114,8 @@ interface ChartTooltipContentProps extends React.ComponentProps<'div'> {
     color?: string;
     dataKey?: string;
     name?: string;
-    value?: any;
-    payload?: any;
+    value?: unknown;
+    payload?: Record<string, unknown>;
     chartType?: string;
   }>;
   label?: string;
@@ -111,13 +125,13 @@ interface ChartTooltipContentProps extends React.ComponentProps<'div'> {
   nameKey?: string;
   labelKey?: string;
   labelClassName?: string;
-  labelFormatter?: (label: any, payload: any[]) => React.ReactNode;
+  labelFormatter?: (label: unknown, payload: unknown[]) => React.ReactNode;
   formatter?: (
-    value: any,
+    value: unknown,
     name: string,
-    props: any,
+    props: unknown,
     index?: number,
-    payload?: any
+    payload?: unknown
   ) => React.ReactNode;
   color?: string;
 }
@@ -180,10 +194,10 @@ function ChartTooltipContent({
     >
       {!nestLabel ? tooltipLabel : null}
       <div className='grid gap-1.5'>
-        {payload.map((item: any, index: number) => {
+        {payload.map((item, index: number) => {
           const key = `${nameKey || item.name || item.dataKey || 'value'}`;
           const itemConfig = getPayloadConfigFromPayload(config, item, key);
-          const indicatorColor = color || item.payload.fill || item.color;
+          const indicatorColor = color || item.payload?.fill || item.color;
 
           return (
             <div
@@ -233,9 +247,11 @@ function ChartTooltipContent({
                         {itemConfig?.label || item.name}
                       </span>
                     </div>
-                    {item.value && (
+                    {item.value !== undefined && (
                       <span className='text-foreground font-mono font-medium tabular-nums'>
-                        {item.value.toLocaleString()}
+                        {typeof item.value === 'number' || typeof item.value === 'string'
+                          ? item.value.toLocaleString()
+                          : String(item.value)}
                       </span>
                     )}
                   </div>
@@ -259,7 +275,7 @@ interface ChartLegendContentProps extends React.ComponentProps<'div'> {
     dataKey?: string;
     type?: string;
     value?: string;
-    payload?: any;
+    payload?: unknown;
   }>;
   verticalAlign?: 'top' | 'bottom';
 }
@@ -285,7 +301,7 @@ function ChartLegendContent({
         className
       )}
     >
-      {payload.map((item: any) => {
+      {payload.map((item) => {
         const key = `${nameKey || item.dataKey || 'value'}`;
         const itemConfig = getPayloadConfigFromPayload(config, item, key);
 

@@ -23,8 +23,8 @@
     "clean": "bun run --filter='*' clean"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.1.4",
-    "typescript": "^5.9.2"
+    "@biomejs/biome": "^2.3.11",
+    "typescript": "^5.9.3"
   },
   "packageManager": "bun",
   "engines": {

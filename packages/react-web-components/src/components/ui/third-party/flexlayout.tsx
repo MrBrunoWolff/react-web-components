@@ -1,10 +1,10 @@
-import { type IJsonModel, Layout, Model, type TabNode } from 'flexlayout-react';
+import { type Action, type IJsonModel, Layout, Model, type TabNode } from 'flexlayout-react';
 import * as React from 'react';
 
 export interface FlexLayoutProps {
   modelJson: IJsonModel;
   factory?: (node: TabNode) => React.ReactNode;
-  onAction?: (action: unknown) => unknown;
+  onAction?: (action: Action) => Action | undefined;
   className?: string;
 }
 
@@ -19,7 +19,7 @@ export function FlexLayout({ modelJson, factory, onAction, className }: FlexLayo
       <Layout
         model={model}
         factory={(node) => (factory ? factory(node) : <div>{node.getName()}</div>)}
-        onAction={onAction as any}
+        onAction={onAction}
       />
     </div>
   );

@@ -624,7 +624,7 @@
   overflow: auto;
   padding: 2px;
 }
-.flexlayout__floating_window _body {
+.flexlayout__floating_window body {
   height: 100%;
 }
 .flexlayout__floating_window_content {

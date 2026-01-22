@@ -43,7 +43,7 @@ function App() {
     },
   };
 
-  const factory = (node: any) => {
+  const factory = (node: { getConfig: () => { text?: string } | undefined }) => {
     const config = node.getConfig() || {};
     return <div style={{ padding: '20px' }}>{config.text || 'Empty panel'}</div>;
   };

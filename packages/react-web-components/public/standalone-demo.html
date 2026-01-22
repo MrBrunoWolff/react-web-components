@@ -141,8 +141,7 @@
   <script>
     // Function to check if components are loaded and render them
     function initializeComponents() {
-      console.log('Initializing components...');
-      
+
       const variantsContainer = document.getElementById('variants-container');
       const sizesContainer = document.getElementById('sizes-container');
       const eventContainer = document.getElementById('event-container');
@@ -153,11 +152,9 @@
       
       // Check if web components are available
       const isButtonDefined = window.customElements && customElements.get('ui-button');
-      console.log('Button component defined:', isButtonDefined);
-      
+
       // Fallback to native buttons if component not found
       if (!isButtonDefined) {
-        console.warn('Web components not loaded - using native fallback');
         
         // Variants with native buttons
         const variants = ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'];
@@ -245,7 +242,7 @@
       // If not loaded yet, try again after a longer delay
       setTimeout(() => {
         if (!customElements.get('ui-button')) {
-          console.log('Retrying component initialization...');
+
           initializeComponents();
         }
       }, 1000);

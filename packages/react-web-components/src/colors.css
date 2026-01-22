@@ -1,33 +1,33 @@
 /* Explicit color definitions for testing */
 
 .bg-red-500 {
-  background-color: #ef4444 !important;
+  background-color: #ef4444;
 }
 
 .bg-blue-500 {
-  background-color: #3b82f6 !important;
+  background-color: #3b82f6;
 }
 
 .bg-green-500 {
-  background-color: #22c55e !important;
+  background-color: #22c55e;
 }
 
 .bg-yellow-500 {
-  background-color: #eab308 !important;
+  background-color: #eab308;
 }
 
 .text-purple-600 {
-  color: #9333ea !important;
+  color: #9333ea;
 }
 
 .text-gray-600 {
-  color: #4b5563 !important;
+  color: #4b5563;
 }
 
 .hover\:bg-blue-700:hover {
-  background-color: #1d4ed8 !important;
+  background-color: #1d4ed8;
 }
 
 .hover\:bg-green-700:hover {
-  background-color: #15803d !important;
+  background-color: #15803d;
 }

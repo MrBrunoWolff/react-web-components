@@ -3,20 +3,27 @@ import { createRoot } from 'react-dom/client';
 import { Button } from '../ui/button';
 
 class ButtonWebComponent extends HTMLElement {
-  private root: any = null;
+  private root: ReturnType<typeof createRoot> | null = null;
 
   connectedCallback() {
-    const variant = (this.getAttribute('variant') as any) || 'default';
-    const size = (this.getAttribute('size') as any) || 'default';
+    const variant =
+      (this.getAttribute('variant') as
+        | 'default'
+        | 'destructive'
+        | 'outline'
+        | 'secondary'
+        | 'ghost'
+        | 'link') || 'default';
+    const size = (this.getAttribute('size') as 'default' | 'sm' | 'lg' | 'icon') || 'default';
     const disabled = this.hasAttribute('disabled');
     const className = this.getAttribute('className') || this.getAttribute('class') || '';
-    const content = this.textContent || this.innerHTML || 'Button';
 
-    // Clear the original content to avoid duplication
-    this.innerHTML = '';
+    // Store the content before clearing
+    const content = this.textContent || '';
 
     // Create a container for React
     const container = document.createElement('div');
+    this.innerHTML = '';
     this.appendChild(container);
 
     this.root = createRoot(container);
