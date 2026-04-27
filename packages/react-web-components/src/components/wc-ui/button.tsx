@@ -4,8 +4,48 @@ import { Button } from '../ui/button';
 
 class ButtonWebComponent extends HTMLElement {
   private root: ReturnType<typeof createRoot> | null = null;
+  private content = '';
+
+  static get observedAttributes() {
+    return ['variant', 'size', 'disabled', 'class', 'className'];
+  }
 
   connectedCallback() {
+    if (!this.root) {
+      this.content = this.textContent || '';
+      this.style.display = 'inline-flex';
+      this.style.verticalAlign = 'middle';
+      this.root = createRoot(this);
+    }
+
+    this.renderButton();
+  }
+
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+    if (!this.root || oldValue === newValue) {
+      return;
+    }
+
+    if (name === 'class' || name === 'className') {
+      this.style.display = 'inline-flex';
+      this.style.verticalAlign = 'middle';
+    }
+
+    this.renderButton();
+  }
+
+  disconnectedCallback() {
+    if (this.root) {
+      this.root.unmount();
+      this.root = null;
+    }
+  }
+
+  private renderButton() {
+    if (!this.root) {
+      return;
+    }
+
     const variant =
       (this.getAttribute('variant') as
         | 'default'
@@ -18,15 +58,6 @@ class ButtonWebComponent extends HTMLElement {
     const disabled = this.hasAttribute('disabled');
     const className = this.getAttribute('className') || this.getAttribute('class') || '';
 
-    // Store the content before clearing
-    const content = this.textContent || '';
-
-    // Create a container for React
-    const container = document.createElement('div');
-    this.innerHTML = '';
-    this.appendChild(container);
-
-    this.root = createRoot(container);
     this.root.render(
       React.createElement(
         Button,
@@ -35,19 +66,10 @@ class ButtonWebComponent extends HTMLElement {
           size,
           disabled,
           className,
-          onClick: () => {
-            this.dispatchEvent(new CustomEvent('click', { bubbles: true }));
-          },
         },
-        content
+        this.content
       )
     );
-  }
-
-  disconnectedCallback() {
-    if (this.root) {
-      this.root.unmount();
-    }
   }
 }
 
