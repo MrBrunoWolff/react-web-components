@@ -46,7 +46,9 @@ const flexLayoutModel = {
 
 // Initialize FlexLayout
 document.addEventListener('DOMContentLoaded', () => {
-  const wcLayout = document.getElementById('wc-layout') as HTMLElement & { modelJson?: unknown };
+  const wcLayout = document.getElementById('wc-layout') as HTMLElement & {
+    modelJson?: unknown;
+  };
   if (wcLayout) {
     wcLayout.modelJson = flexLayoutModel;
   }

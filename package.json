@@ -2,10 +2,32 @@
   "name": "@mrbrunowolff/react-web-components-monorepo",
   "version": "1.0.0",
   "description": "Monorepo for self-contained React components wrapped as Web Components",
-  "type": "module",
+  "keywords": [
+    "bun",
+    "components",
+    "design-system",
+    "flexlayout",
+    "monorepo",
+    "react",
+    "self-contained",
+    "shadcn",
+    "ui",
+    "web-components"
+  ],
+  "homepage": "https://github.com/MrBrunoWolff/react-web-components#readme",
+  "bugs": {
+    "url": "https://github.com/MrBrunoWolff/react-web-components/issues"
+  },
+  "license": "MIT",
+  "author": "Bruno Wolff",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MrBrunoWolff/react-web-components.git"
+  },
   "workspaces": [
     "packages/*"
   ],
+  "type": "module",
   "scripts": {
     "bootstrap": "bun install && cd packages/react-web-components && bun install && cd ../showcase-react && bun install && cd ../showcase-wc && bun install && cd ../..",
     "dev": "bun run --filter='*' dev",
@@ -13,43 +35,23 @@
     "build:lib": "bun run --filter=@mrbrunowolff/react-web-components build:lib",
     "showcase:react": "bun run --filter=showcase-react dev",
     "showcase:wc": "bun run --filter=showcase-wc dev",
-    "format": "biome format --write .",
-    "format:check": "biome format .",
-    "lint": "biome lint --write .",
-    "lint:check": "biome lint .",
-    "check": "biome check --write .",
-    "check:ci": "biome ci .",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "check": "oxlint --fix && oxfmt",
+    "check:ci": "oxlint && oxfmt --check",
+    "typecheck": "bun run --filter=@mrbrunowolff/react-web-components build:types && bun install && bun run --filter='*' typecheck",
     "test": "bun run --filter='*' test",
     "clean": "bun run --filter='*' clean"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.13",
+    "oxfmt": "^0.55.0",
+    "oxlint": "^1.70.0",
     "typescript": "^6.0.3"
   },
-  "packageManager": "bun",
   "engines": {
     "bun": ">=1.0.0"
   },
-  "keywords": [
-    "monorepo",
-    "react",
-    "web-components",
-    "shadcn",
-    "ui",
-    "components",
-    "design-system",
-    "bun",
-    "flexlayout",
-    "self-contained"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/MrBrunoWolff/react-web-components.git"
-  },
-  "author": "Bruno Wolff",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/MrBrunoWolff/react-web-components/issues"
-  },
-  "homepage": "https://github.com/MrBrunoWolff/react-web-components#readme"
+  "packageManager": "bun"
 }

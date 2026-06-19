@@ -29,7 +29,7 @@ export function registerAllComponents() {
   if (!customElements.get('ui-flexlayout')) {
     customElements.define(
       'ui-flexlayout',
-      FlexLayoutWebComponent as unknown as CustomElementConstructor
+      FlexLayoutWebComponent as unknown as CustomElementConstructor,
     );
   }
 

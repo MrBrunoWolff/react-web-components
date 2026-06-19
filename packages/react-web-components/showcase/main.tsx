@@ -41,10 +41,10 @@ const modelReact: IJsonModel = {
   const root = createRoot(el);
   root.render(
     <div style={{ display: 'flex', gap: 12 }}>
-      <Button variant='default'>Default</Button>
-      <Button variant='secondary'>Secondary</Button>
-      <Button variant='destructive'>Delete</Button>
-    </div>
+      <Button variant="default">Default</Button>
+      <Button variant="secondary">Secondary</Button>
+      <Button variant="destructive">Delete</Button>
+    </div>,
   );
 }
 
@@ -60,17 +60,21 @@ const modelReact: IJsonModel = {
   if (!el) throw new Error('flex-react element not found');
   const root = createRoot(el);
   root.render(
-    <div style={{ height: '100%', width: '100%', minHeight: 400, display: 'flex' }}>
+    <div
+      style={{ height: '100%', width: '100%', minHeight: 400, display: 'flex' }}
+    >
       <div style={{ flex: 1 }}>
         <FlexLayout modelJson={modelReact} />
       </div>
-    </div>
+    </div>,
   );
 }
 
 // Initialize WC FlexLayout
 {
-  const wc = document.getElementById('flex-wc') as HTMLElement & { modelJson?: unknown };
+  const wc = document.getElementById('flex-wc') as HTMLElement & {
+    modelJson?: unknown;
+  };
   if (wc) {
     const modelWc: IJsonModel = {
       global: {},

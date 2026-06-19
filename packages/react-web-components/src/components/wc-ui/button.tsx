@@ -21,7 +21,11 @@ class ButtonWebComponent extends HTMLElement {
     this.renderButton();
   }
 
-  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+  attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ) {
     if (!this.root || oldValue === newValue) {
       return;
     }
@@ -54,9 +58,12 @@ class ButtonWebComponent extends HTMLElement {
         | 'secondary'
         | 'ghost'
         | 'link') || 'default';
-    const size = (this.getAttribute('size') as 'default' | 'sm' | 'lg' | 'icon') || 'default';
+    const size =
+      (this.getAttribute('size') as 'default' | 'sm' | 'lg' | 'icon') ||
+      'default';
     const disabled = this.hasAttribute('disabled');
-    const className = this.getAttribute('className') || this.getAttribute('class') || '';
+    const className =
+      this.getAttribute('className') || this.getAttribute('class') || '';
 
     this.root.render(
       React.createElement(
@@ -67,8 +74,8 @@ class ButtonWebComponent extends HTMLElement {
           disabled,
           className,
         },
-        this.content
-      )
+        this.content,
+      ),
     );
   }
 }

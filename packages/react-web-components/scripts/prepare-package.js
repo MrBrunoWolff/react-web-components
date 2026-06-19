@@ -46,7 +46,7 @@ function runCommand(command) {
     log(`Running: ${command}`, COLORS.blue);
     execSync(command, { stdio: 'inherit' });
     return true;
-  } catch (_err) {
+  } catch {
     error(`Failed to run command: ${command}`);
     return false;
   }
@@ -68,7 +68,14 @@ function validatePackageJson() {
   const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
 
   // Check for required fields
-  const requiredFields = ['name', 'version', 'main', 'module', 'files', 'license'];
+  const requiredFields = [
+    'name',
+    'version',
+    'main',
+    'module',
+    'files',
+    'license',
+  ];
   requiredFields.forEach((field) => {
     if (!pkg[field]) {
       error(`package.json is missing required field: ${field}`);
@@ -76,7 +83,14 @@ function validatePackageJson() {
   });
 
   // Check for recommended fields
-  const recommendedFields = ['description', 'keywords', 'author', 'repository', 'bugs', 'homepage'];
+  const recommendedFields = [
+    'description',
+    'keywords',
+    'author',
+    'repository',
+    'bugs',
+    'homepage',
+  ];
   recommendedFields.forEach((field) => {
     if (!pkg[field]) {
       warn(`package.json is missing recommended field: ${field}`);
@@ -85,7 +99,9 @@ function validatePackageJson() {
 
   // Ensure private is not true
   if (pkg.private === true) {
-    error('package.json has "private": true - this package cannot be published to npm');
+    error(
+      'package.json has "private": true - this package cannot be published to npm',
+    );
   }
 
   success('package.json is valid');
@@ -124,7 +140,10 @@ function copyFilesToDist() {
     peerDependencies: pkg.peerDependencies,
   };
 
-  fs.writeFileSync(path.join(DIST_DIR, 'package.json'), JSON.stringify(distPkg, null, 2));
+  fs.writeFileSync(
+    path.join(DIST_DIR, 'package.json'),
+    JSON.stringify(distPkg, null, 2),
+  );
   success('Created package.json in dist/');
 }
 

@@ -69,37 +69,44 @@ function App() {
   }, [wcClicks]);
 
   // Array of button variants to display
-  const variants = ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'] as const;
+  const variants = [
+    'default',
+    'destructive',
+    'outline',
+    'secondary',
+    'ghost',
+    'link',
+  ] as const;
 
   return (
-    <div className='container'>
+    <div className="container">
       <h1>React Web Components Demo</h1>
 
       {/* Tailwind Test Component */}
       <TailwindTest />
 
-      <div className='web-component-demo'>
+      <div className="web-component-demo">
         <h2>Button Comparison - Click Counter</h2>
-        <div className='button-comparison'>
-          <div className='demo-card'>
+        <div className="button-comparison">
+          <div className="demo-card">
             <h3>React Button</h3>
-            <Button variant='default' onClick={handleReactButtonClick}>
+            <Button variant="default" onClick={handleReactButtonClick}>
               Button (Clicked: {count})
             </Button>
           </div>
 
-          <div className='demo-card'>
+          <div className="demo-card">
             <h3>Web Component Button</h3>
-            <div className='wc-container'></div>
+            <div className="wc-container"></div>
           </div>
         </div>
 
-        <h2 className='mt-8'>Button Variants</h2>
-        <div className='variant-grid'>
+        <h2 className="mt-8">Button Variants</h2>
+        <div className="variant-grid">
           {variants.map((variant) => (
-            <div key={variant} className='variant-comparison'>
+            <div key={variant} className="variant-comparison">
               <h3>{variant}</h3>
-              <div className='buttons'>
+              <div className="buttons">
                 <div>
                   <p>React</p>
                   <Button variant={variant}>{variant}</Button>

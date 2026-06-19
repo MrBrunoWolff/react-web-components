@@ -1,13 +1,10 @@
 import r2wc from '@r2wc/react-to-web-component';
 import type { IJsonModel } from 'flexlayout-react';
-import React from 'react';
 import { FlexLayout } from '../../ui/third-party/flexlayout';
 
 // Note: We cannot import CSS as strings in type-only builds; inject minimal styles instead.
 const lightCss = `:host{display:block}.flexlayout__layout{inset:0}`;
 const darkCss = lightCss;
-
-React;
 
 type FlexLayoutWrapperProps = {
   modelJson: IJsonModel;
@@ -15,18 +12,29 @@ type FlexLayoutWrapperProps = {
   theme?: 'light' | 'dark';
 };
 
-const FlexLayoutWrapper = ({ modelJson, className, theme = 'light' }: FlexLayoutWrapperProps) => {
+const FlexLayoutWrapper = ({
+  modelJson,
+  className,
+  theme = 'light',
+}: FlexLayoutWrapperProps) => {
   const css = theme === 'dark' ? darkCss : lightCss;
-  const mergedClass = className ? `${className} flexlayout-host` : 'flexlayout-host';
+  const mergedClass = className
+    ? `${className} flexlayout-host`
+    : 'flexlayout-host';
   return (
     <div
       className={mergedClass}
-      style={{ position: 'relative', width: '100%', height: '100%', minHeight: '400px' }}
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        minHeight: '400px',
+      }}
     >
       <style>{css}</style>
       <FlexLayout
         modelJson={modelJson}
-        className='flexlayout-container'
+        className="flexlayout-container"
         // factory={(node) => {
         //   const comp = (node as any).getComponent?.()
         //   if (comp === 'actions') {
@@ -59,7 +67,7 @@ if (typeof window !== 'undefined' && typeof customElements !== 'undefined') {
   if (!customElements.get('ui-flexlayout')) {
     customElements.define(
       'ui-flexlayout',
-      FlexLayoutWebComponent as unknown as CustomElementConstructor
+      FlexLayoutWebComponent as unknown as CustomElementConstructor,
     );
   }
 }

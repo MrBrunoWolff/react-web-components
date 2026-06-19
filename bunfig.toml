@@ -1,0 +1,4 @@
+[install]
+# Refuse to install npm versions published less than 3 days ago.
+# Defence against supply-chain attacks.
+minimumReleaseAge = 259200

@@ -326,10 +326,11 @@ bun run build:lib
 # Run tests across all packages
 bun run test
 
-# Format and lint all packages with Biome
-bun run format     # Format all files
-bun run lint       # Lint and fix issues
-bun run check      # Format + lint + fix everything
+# Format and lint all packages with oxc (oxlint + oxfmt)
+bun run format     # Format all files with oxfmt
+bun run lint       # Lint with oxlint
+bun run lint:fix   # Lint and auto-fix issues with oxlint
+bun run check      # Lint --fix + format everything
 ```
 
 ### Root Scripts
@@ -341,9 +342,12 @@ bun run check      # Format + lint + fix everything
 - `bun run build:lib` - Build the main component library
 - `bun run showcase:react` - Start React showcase (port 3000)
 - `bun run showcase:wc` - Start Web Components showcase (port 3001)
-- `bun run format` - Format all files with Biome
-- `bun run lint` - Lint and fix issues with Biome  
-- `bun run check` - Format + lint + fix everything with Biome
+- `bun run format` - Format all files with oxfmt
+- `bun run format:check` - Check formatting with oxfmt (no writes)
+- `bun run lint` - Lint with oxlint
+- `bun run lint:fix` - Lint and auto-fix issues with oxlint
+- `bun run check` - Lint --fix + format everything
+- `bun run check:ci` - Lint + format check (CI, no writes)
 - `bun run test` - Test all packages
 - `bun run clean` - Clean all build artifacts
 
@@ -395,4 +399,4 @@ MIT License - see [LICENSE](LICENSE) file for details.
 - [Vite](https://vitejs.dev/) - React showcase build tool
 - [Lit](https://lit.dev/) - Web Components showcase framework
 - [Bun](https://bun.sh/) - Fast JavaScript runtime and package manager
-- [Biome](https://biomejs.dev/) - Fast formatter and linter for web projects
+- [oxc](https://oxc.rs/) - Fast linter (oxlint) and formatter (oxfmt) for web projects

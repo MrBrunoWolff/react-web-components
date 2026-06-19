@@ -43,47 +43,51 @@ function App() {
     },
   };
 
-  const factory = (node: { getConfig: () => { text?: string } | undefined }) => {
+  const factory = (node: {
+    getConfig: () => { text?: string } | undefined;
+  }) => {
     const config = node.getConfig() || {};
-    return <div style={{ padding: '20px' }}>{config.text || 'Empty panel'}</div>;
+    return (
+      <div style={{ padding: '20px' }}>{config.text || 'Empty panel'}</div>
+    );
   };
 
   return (
-    <div className='container'>
-      <div className='header'>
+    <div className="container">
+      <div className="header">
         <h1>React Components Showcase</h1>
         <p>React components from our self-contained component library</p>
       </div>
 
-      <div className='section'>
+      <div className="section">
         <h2>Button Components</h2>
-        <div className='button-showcase'>
-          <Button variant='default'>Default</Button>
-          <Button variant='secondary'>Secondary</Button>
-          <Button variant='destructive'>Delete</Button>
-          <Button variant='outline'>Outline</Button>
-          <Button variant='ghost'>Ghost</Button>
-          <Button variant='link'>Link</Button>
+        <div className="button-showcase">
+          <Button variant="default">Default</Button>
+          <Button variant="secondary">Secondary</Button>
+          <Button variant="destructive">Delete</Button>
+          <Button variant="outline">Outline</Button>
+          <Button variant="ghost">Ghost</Button>
+          <Button variant="link">Link</Button>
         </div>
-        <div className='button-showcase'>
-          <Button size='sm'>Small</Button>
-          <Button size='default'>Default</Button>
-          <Button size='lg'>Large</Button>
+        <div className="button-showcase">
+          <Button size="sm">Small</Button>
+          <Button size="default">Default</Button>
+          <Button size="lg">Large</Button>
           <Button disabled>Disabled</Button>
         </div>
-        <div className='code-example'>
+        <div className="code-example">
           {`<Button variant="default">Default</Button>
 <Button variant="secondary">Secondary</Button>
 <Button variant="destructive">Delete</Button>`}
         </div>
       </div>
 
-      <div className='section'>
+      <div className="section">
         <h2>FlexLayout Component</h2>
-        <div className='layout-container'>
+        <div className="layout-container">
           <FlexLayout modelJson={flexLayoutModel} factory={factory} />
         </div>
-        <div className='code-example'>
+        <div className="code-example">
           {`<FlexLayout 
   modelJson={model}
   factory={factory}

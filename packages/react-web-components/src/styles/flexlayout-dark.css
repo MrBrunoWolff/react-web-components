@@ -372,7 +372,6 @@
   text-wrap: nowrap;
 }
 .flexlayout__tab_button_textbox {
-  border: none;
   font-family: var(--font-family);
   font-size: var(--font-size);
   color: var(--color-tab-textbox);
