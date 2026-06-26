@@ -46,8 +46,8 @@
     "clean": "bun run --filter='*' clean"
   },
   "devDependencies": {
-    "oxfmt": "^0.55.0",
-    "oxlint": "^1.70.0",
+    "oxfmt": "^0.56.0",
+    "oxlint": "^1.71.0",
     "typescript": "^6.0.3"
   },
   "engines": {
