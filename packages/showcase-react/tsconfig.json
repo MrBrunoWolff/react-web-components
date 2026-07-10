@@ -5,11 +5,11 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "verbatimModuleSyntax": true,
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -25,6 +25,8 @@
     /* Path mapping */
     "paths": {
       "@/*": ["./src/*"],
+      "@mrbrunowolff/react-web-components": ["../react-web-components/src/index.ts"],
+      "@mrbrunowolff/react-web-components/components/*": ["../react-web-components/src/components/*"],
       "*": ["./*"]
     }
   },
