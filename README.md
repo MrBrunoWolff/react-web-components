@@ -57,10 +57,6 @@ bun run build:lib
 ## 📦 Installation
 
 ```bash
-npm install @mrbrunowolff/react-web-components
-# or
-yarn add @mrbrunowolff/react-web-components
-# or
 bun add @mrbrunowolff/react-web-components
 ```
 
