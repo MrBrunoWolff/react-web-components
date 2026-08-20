@@ -11,12 +11,12 @@
     "clean": "rm -rf dist node_modules"
   },
   "dependencies": {
-    "@mrbrunowolff/react-web-components": "file:../react-web-components",
-    "lit": "^3.2.1"
+    "@mrbrunowolff/react-web-components": "workspace:*",
+    "lit": "^3.3.3"
   },
   "devDependencies": {
-    "@types/node": "^24.2.1",
-    "typescript": "^5.9.2",
-    "vite": "^7.1.1"
+    "@types/node": "^26.2.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.1"
   }
 }

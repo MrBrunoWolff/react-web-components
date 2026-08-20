@@ -29,7 +29,6 @@
   ],
   "type": "module",
   "scripts": {
-    "bootstrap": "bun install && cd packages/react-web-components && bun install && cd ../showcase-react && bun install && cd ../showcase-wc && bun install && cd ../..",
     "dev": "bun run --filter='*' dev",
     "build": "bun run --filter='*' build",
     "build:lib": "bun run --filter=@mrbrunowolff/react-web-components build:lib",
@@ -40,18 +39,20 @@
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "check": "oxlint --fix && oxfmt",
-    "check:ci": "oxlint && oxfmt --check",
+    "check:ci": "bun run --parallel --no-exit-on-error lint format:check",
     "typecheck": "bun run --filter=@mrbrunowolff/react-web-components build:types && bun install && bun run --filter='*' typecheck",
     "test": "bun run --filter='*' test",
-    "clean": "bun run --filter='*' clean"
+    "clean": "bun run --filter='*' clean",
+    "audit": "bun audit --audit-level=high",
+    "licenses": "bun pm licenses --prod"
   },
   "devDependencies": {
-    "oxfmt": "^0.58.0",
-    "oxlint": "^1.73.0",
+    "oxfmt": "^0.63.0",
+    "oxlint": "^1.78.0",
     "typescript": "^7.0.2"
   },
   "engines": {
     "bun": ">=1.0.0"
   },
-  "packageManager": "bun"
+  "packageManager": "bun@1.4.0"
 }
