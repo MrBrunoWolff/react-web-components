@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Lets a release be triggered deliberately — `gh workflow run ci.yml` —
+  # instead of pushing an empty commit just to re-run the publish job.
+  workflow_dispatch:
 
 jobs:
   quality:
@@ -42,3 +45,90 @@ jobs:
       # bunfig slows a malicious package down; this is what notices a known one.
       - name: Audit
         run: bun run audit
+
+  publish:
+    name: Publish to npm
+    needs: quality
+    runs-on: ubuntu-latest
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    # Trusted publishing (OIDC): npm verifies this workflow's identity against
+    # the trusted publisher configured on the package, so there is no token to
+    # store, leak or rotate.
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: 1.4.0
+
+      # npm drives the publish: trusted publishing is an npm CLI feature and
+      # `bun publish` has no OIDC support.
+      - name: Setup Node.js for npm publishing
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '24.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      # Trusted publishing needs npm >= 11.5.1.
+      - name: Ensure npm supports trusted publishing
+        run: |
+          npm install -g npm@latest
+          echo "npm $(npm --version) / node $(node --version)"
+
+      # Install and build at the workspace root — the library's build pulls in
+      # workspace-linked packages, so it cannot run from the package alone.
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build the library
+        run: bun run build:lib
+
+      # Publish from the package directory: this is a monorepo and only
+      # packages/react-web-components is published, not the workspace root
+      # (which is private and named ...-monorepo).
+      - name: Publish to npm (if version changed)
+        working-directory: packages/react-web-components
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+
+          if ! npm view "$PACKAGE_NAME" version >/dev/null 2>&1; then
+            echo "$PACKAGE_NAME does not exist on npm yet."
+            echo "Publish once manually, then configure the trusted publisher."
+            exit 0
+          fi
+
+          if npm view "$PACKAGE_NAME@$PACKAGE_VERSION" version >/dev/null 2>&1; then
+            echo "Version $PACKAGE_VERSION already exists, skipping publish"
+            exit 0
+          fi
+
+          echo "Publishing $PACKAGE_NAME@$PACKAGE_VERSION via trusted publishing"
+
+          # An unauthorised publish comes back as 404 (npm hides existence for
+          # scoped names) or EOTP — both mean the trusted publisher is not wired
+          # up yet, which is a setup step rather than broken code. Anything else
+          # is a real failure.
+          if npm publish 2>&1 | tee /tmp/publish.log; then
+            echo "Published $PACKAGE_NAME@$PACKAGE_VERSION"
+            exit 0
+          fi
+
+          if grep -qE "code (E404|EOTP|ENEEDAUTH)" /tmp/publish.log; then
+            echo "::warning::Publish not authorised — is a trusted publisher configured?"
+            echo "On npmjs.com: $PACKAGE_NAME -> Settings -> Trusted Publisher"
+            echo "  Organization or user: ${GITHUB_REPOSITORY%%/*}"
+            echo "  Repository:           ${GITHUB_REPOSITORY##*/}"
+            echo "  Workflow filename:    ci.yml"
+            exit 0
+          fi
+
+          echo "::error::npm publish failed for a reason unrelated to authorisation"
+          exit 1

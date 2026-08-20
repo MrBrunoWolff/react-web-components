@@ -21,7 +21,8 @@
   "author": "Bruno Wolff",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MrBrunoWolff/react-web-components.git"
+    "url": "git+https://github.com/MrBrunoWolff/react-web-components.git",
+    "directory": "packages/react-web-components"
   },
   "files": [
     "dist/web-components",
@@ -56,6 +57,9 @@
     "./styles/flexlayout-light.css": "./src/styles/flexlayout-light.css",
     "./styles/flexlayout-dark.css": "./src/styles/flexlayout-dark.css",
     "./styles/flexlayout.css": "./src/styles/flexlayout.css"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "dev": "vite",
