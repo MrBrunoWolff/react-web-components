@@ -22,7 +22,7 @@
   "author": "Bruno Wolff",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MrBrunoWolff/react-web-components.git"
+    "url": "git+https://github.com/MrBrunoWolff/react-web-components.git"
   },
   "workspaces": [
     "packages/*"
