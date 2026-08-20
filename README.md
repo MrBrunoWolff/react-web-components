@@ -332,7 +332,6 @@ bun run check      # Lint --fix + format everything
 ### Root Scripts
 
 - `bun install` - Install dependencies for all packages (Bun workspaces handles everything automatically!)
-- `bun run bootstrap` - Alias for `bun install` (optional)
 - `bun run dev` - Start development servers for all packages
 - `bun run build` - Build all packages
 - `bun run build:lib` - Build the main component library
@@ -340,6 +339,10 @@ bun run check      # Lint --fix + format everything
 - `bun run showcase:wc` - Start Web Components showcase (port 3001)
 - `bun run format` - Format all files with oxfmt
 - `bun run format:check` - Check formatting with oxfmt (no writes)
+- `bun run typecheck` - Typecheck every workspace
+- `bun run test` - Run the test suites in every workspace
+- `bun run audit` - Fail on a dependency with a high or critical advisory
+- `bun run licenses` - List production dependencies grouped by licence
 - `bun run lint` - Lint with oxlint
 - `bun run lint:fix` - Lint and auto-fix issues with oxlint
 - `bun run check` - Lint --fix + format everything
