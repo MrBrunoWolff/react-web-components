@@ -1,6 +1,6 @@
 {
   "name": "@mrbrunowolff/react-web-components",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Self-contained shadcn/ui components wrapped as Web Components for use in any framework - no external CSS dependencies required",
   "keywords": [
     "bun",
