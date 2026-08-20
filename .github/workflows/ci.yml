@@ -112,23 +112,12 @@ jobs:
 
           echo "Publishing $PACKAGE_NAME@$PACKAGE_VERSION via trusted publishing"
 
-          # An unauthorised publish comes back as 404 (npm hides existence for
-          # scoped names) or EOTP — both mean the trusted publisher is not wired
-          # up yet, which is a setup step rather than broken code. Anything else
-          # is a real failure.
-          if npm publish 2>&1 | tee /tmp/publish.log; then
-            echo "Published $PACKAGE_NAME@$PACKAGE_VERSION"
-            exit 0
-          fi
-
-          if grep -qE "code (E404|EOTP|ENEEDAUTH)" /tmp/publish.log; then
-            echo "::warning::Publish not authorised — is a trusted publisher configured?"
-            echo "On npmjs.com: $PACKAGE_NAME -> Settings -> Trusted Publisher"
-            echo "  Organization or user: ${GITHUB_REPOSITORY%%/*}"
-            echo "  Repository:           ${GITHUB_REPOSITORY##*/}"
-            echo "  Workflow filename:    ci.yml"
-            exit 0
-          fi
-
-          echo "::error::npm publish failed for a reason unrelated to authorisation"
-          exit 1
+          # A failure here is a real failure. Auth errors used to be tolerated
+          # while trusted publishers were still being set up, but that made a
+          # green run mean "nothing went wrong" rather than "published" — the
+          # wrong signal for a release pipeline. If this fails with E404 or
+          # EOTP, the trusted publisher for this package is missing or its
+          # fields do not match: organization MrBrunoWolff, this repository,
+          # workflow ci.yml, environment empty.
+          npm publish
+          echo "Published $PACKAGE_NAME@$PACKAGE_VERSION"
