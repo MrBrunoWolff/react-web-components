@@ -2,6 +2,9 @@
 
 Self-contained shadcn/ui components wrapped as Web Components for use in any framework - no external CSS dependencies required.
 
+[![npm](https://img.shields.io/npm/v/@mrbrunowolff/react-web-components?style=flat-square)](https://www.npmjs.com/package/@mrbrunowolff/react-web-components)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
+
 ## 📁 Monorepo Structure
 
 This monorepo contains three packages:
