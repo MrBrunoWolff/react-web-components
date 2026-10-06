@@ -1,0 +1,17 @@
+{
+  "tier": "rich",
+  "bun": "1.4.2",
+  "node": "24.x",
+  "stages": {
+    "code": [
+      ["bun", "run", "check"],
+      ["bun", "run", "typecheck"],
+      ["bun", "run", "test"],
+      ["bun", "run", "build"],
+      ["bun", "run", "build:lib"],
+      ["playwright-install"],
+      ["bun", "run", "test:package"]
+    ],
+    "security": [["bun", "run", "audit"]]
+  }
+}
