@@ -63,7 +63,9 @@ bun run build:lib
 bun add @mrbrunowolff/react-web-components
 ```
 
-> **Note**: React and React-DOM are included as dependencies since the Web Components are built using React internally. No additional React installation is needed.
+The `/wc` standalone bundle includes React and styles for plain HTML and other frameworks. React applications should install React 19 and React DOM 19 and use `/react` for components or `/wc/peer` for custom elements sharing the app's React installation.
+
+The monorepo root is private; only the component library is published. All JavaScript entry points resolve to compiled ESM and CommonJS files with declarations. Existing component and `src` subpaths remain available. Frontend TypeScript consumers should use `moduleResolution: "Bundler"`; FlexLayout's upstream declarations currently use extensionless imports that prevent strict NodeNext checking.
 
 ## 🎯 Usage
 
@@ -76,9 +78,7 @@ For any frontend framework or vanilla HTML/JS:
 <!DOCTYPE html>
 <html>
 <head>
-  <!-- Include FlexLayout styles for proper layout rendering -->
-  <link rel="stylesheet" href="https://unpkg.com/@mrbrunowolff/react-web-components/styles/flexlayout-light.css">
-  <script type="module" src="https://unpkg.com/@mrbrunowolff/react-web-components"></script>
+
 </head>
 <body>
   <!-- Button examples -->
@@ -89,8 +89,9 @@ For any frontend framework or vanilla HTML/JS:
   <!-- FlexLayout example -->
   <ui-flexlayout id="my-layout" theme="light"></ui-flexlayout>
   
-  <script>
-    // Configure FlexLayout
+  <script type="module">
+    import "https://unpkg.com/@mrbrunowolff/react-web-components@1.1.0/dist/web-components/react-web-components.es.js";
+    // Configure after custom elements have been registered
     const layout = document.getElementById('my-layout');
     layout.modelJson = {
       global: { tabEnableClose: true },
@@ -113,8 +114,8 @@ For any frontend framework or vanilla HTML/JS:
 
 #### React/Next.js/Vite
 ```tsx
-import '@mrbrunowolff/react-web-components'
-import '@mrbrunowolff/react-web-components/styles/flexlayout-light.css'
+'use client'
+import '@mrbrunowolff/react-web-components/wc/peer'
 
 declare global {
   namespace JSX {
@@ -145,8 +146,7 @@ export default function App() {
 </template>
 
 <script setup>
-import '@mrbrunowolff/react-web-components'
-import '@mrbrunowolff/react-web-components/styles/flexlayout-light.css'
+import '@mrbrunowolff/react-web-components/wc'
 import { ref, onMounted } from 'vue'
 
 const layout = ref()
@@ -167,8 +167,7 @@ onMounted(() => {
 ```typescript
 // app.component.ts
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import '@mrbrunowolff/react-web-components'
-import '@mrbrunowolff/react-web-components/styles/flexlayout-light.css'
+import '@mrbrunowolff/react-web-components/wc'
 
 @Component({
   selector: 'app-root',
@@ -190,7 +189,8 @@ export class AppComponent {
 For React applications that want to use the components directly:
 
 ```tsx
-import { Button } from '@mrbrunowolff/react-web-components/components/ui/button'
+import { Button } from '@mrbrunowolff/react-web-components/react'
+import '@mrbrunowolff/react-web-components/theme.css'
 import { FlexLayout } from '@mrbrunowolff/react-web-components/components/ui/third-party/flexlayout'
 import '@mrbrunowolff/react-web-components/styles/flexlayout-light.css'
 
@@ -402,3 +402,6 @@ MIT License - see [LICENSE](LICENSE) file for details.
 - [Lit](https://lit.dev/) - Web Components showcase framework
 - [Bun](https://bun.sh/) - Fast JavaScript runtime and package manager
 - [oxc](https://oxc.rs/) - Fast linter (oxlint) and formatter (oxfmt) for web projects
+### Packed package validation
+
+`bun run check:ci` runs lint, formatting, types, unit tests, builds, audit, and real packed-package checks. Before running locally, install Chromium with `bunx playwright install chromium`. The package checks exercise Node ESM/CommonJS imports, React server rendering, strict frontend declarations, and a plain HTML browser with button interactions and simultaneous FlexLayout themes.

@@ -5,8 +5,8 @@
  * Import from this file to use the web components in your application.
  */
 
-// NOTE: CSS files are imported in the main entry points (not here) to avoid TypeScript errors
-// The CSS is bundled separately and should be imported by the consumer
+// Browser wrappers install their required theme styles when mounted.
+// Direct React consumers can import the exported theme.css stylesheet.
 
 // Import and re-export the Web Components
 import { ButtonWebComponent } from './components/wc-ui/button';

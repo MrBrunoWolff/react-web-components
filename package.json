@@ -1,6 +1,7 @@
 {
   "name": "@mrbrunowolff/react-web-components-monorepo",
   "version": "1.0.0",
+  "private": true,
   "description": "Monorepo for self-contained React components wrapped as Web Components",
   "keywords": [
     "bun",
@@ -30,7 +31,7 @@
   "type": "module",
   "scripts": {
     "dev": "bun run --filter='*' dev",
-    "build": "bun run --filter='*' build",
+    "build": "bun run build:lib && bun run --filter=showcase-react --filter=showcase-wc build",
     "build:lib": "bun run --filter=@mrbrunowolff/react-web-components build:lib",
     "showcase:react": "bun run --filter=showcase-react dev",
     "showcase:wc": "bun run --filter=showcase-wc dev",
@@ -39,14 +40,16 @@
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "check": "oxlint --fix && oxfmt",
-    "check:ci": "bun run --parallel --no-exit-on-error lint format:check",
-    "typecheck": "bun run --filter=@mrbrunowolff/react-web-components build:types && bun install && bun run --filter='*' typecheck",
+    "check:ci": "bun run lint && bun run format:check && bun run typecheck && bun run test && bun run build && bun run test:package && bun run audit",
+    "typecheck": "bun run --filter=@mrbrunowolff/react-web-components build:types && bun run --filter='*' typecheck",
     "test": "bun run --filter='*' test",
     "clean": "bun run --filter='*' clean",
     "audit": "bun audit --audit-level=high",
-    "licenses": "bun pm licenses --prod"
+    "licenses": "bun pm licenses --prod",
+    "test:package": "node scripts/test-package.mjs"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "oxfmt": "^0.70.0",
     "oxlint": "^1.86.0",
     "typescript": "^7.0.2"

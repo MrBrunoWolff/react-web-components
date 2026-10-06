@@ -4,17 +4,20 @@
  */
 
 // Core styles
-import './index.css';
-import './colors.css';
-import './styles/wc-theme.css';
+import { installWebComponentStyles } from './lib/wc-styles';
 
 // Import components
-import { ButtonWebComponent, registerAllComponents } from './index';
+import {
+  ButtonWebComponent,
+  FlexLayoutWebComponent,
+  registerAllComponents,
+} from './index';
 
 // Export components
-export { ButtonWebComponent, registerAllComponents };
+export { ButtonWebComponent, FlexLayoutWebComponent, registerAllComponents };
 
 // Auto-register components
 if (typeof window !== 'undefined' && typeof customElements !== 'undefined') {
+  installWebComponentStyles();
   registerAllComponents();
 }

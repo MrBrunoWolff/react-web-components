@@ -6,6 +6,8 @@
     "emitDeclarationOnly": true
   },
   "include": [
+    "src/global.d.ts",
+    "src/react.ts",
     "src/components/**/*",
     "src/lib/**/*",
     "src/hooks/**/*",

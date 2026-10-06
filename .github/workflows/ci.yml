@@ -23,28 +23,11 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      # lint + format, in parallel.
-      - name: Check
+      - name: Install browser for packed consumer checks
+        run: bunx playwright install --with-deps chromium
+
+      - name: Validate code, builds, packed consumers and security
         run: bun run check:ci
-
-      - name: Typecheck
-        run: bun run typecheck
-
-      - name: Test
-        run: bun run test
-
-      - name: Build
-        run: bun run build
-
-      # The library is published from this package, so the artifact consumers
-      # actually install gets built too.
-      - name: Build library
-        run: bun run build:lib
-
-      # Fails the build on a high or critical advisory. The release-age gate in
-      # bunfig slows a malicious package down; this is what notices a known one.
-      - name: Audit
-        run: bun run audit
 
   publish:
     name: Publish to npm
