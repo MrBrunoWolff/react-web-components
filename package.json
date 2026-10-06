@@ -36,15 +36,17 @@
     "showcase:wc": "bun run --filter=showcase-wc dev",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
-    "lint": "oxlint",
+    "lint": "oxlint --deny-warnings",
     "lint:fix": "oxlint --fix",
-    "check": "oxlint --fix && oxfmt",
-    "check:ci": "bun run --parallel --no-exit-on-error lint format:check",
-    "typecheck": "bun run --filter=@mrbrunowolff/react-web-components build:types && bun install && bun run --filter='*' typecheck",
+    "check": "bun run --parallel --no-exit-on-error lint format:check",
+    "check:ci": "node scripts/quality.mjs",
+    "typecheck": "bun run --filter=@mrbrunowolff/react-web-components build:types && bun run --filter='*' typecheck",
     "test": "bun run --filter='*' test",
     "clean": "bun run --filter='*' clean",
     "audit": "bun audit --audit-level=high",
-    "licenses": "bun pm licenses --prod"
+    "licenses": "bun pm licenses --prod",
+    "check:code": "node scripts/quality.mjs code",
+    "check:security": "node scripts/quality.mjs security"
   },
   "devDependencies": {
     "oxfmt": "^0.70.0",
@@ -54,5 +56,5 @@
   "engines": {
     "bun": ">=1.0.0"
   },
-  "packageManager": "bun@1.4.0"
+  "packageManager": "bun@1.4.2"
 }

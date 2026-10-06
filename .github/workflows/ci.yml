@@ -4,50 +4,86 @@ on:
   push:
     branches: [main]
   pull_request:
-  # Lets a release be triggered deliberately — `gh workflow run ci.yml` —
-  # instead of pushing an empty commit just to re-run the publish job.
   workflow_dispatch:
+  schedule:
+    - cron: '17 7 * * 1-5'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  CI: '1'
+  WRANGLER_SEND_METRICS: 'false'
+  ASTRO_TELEMETRY_DISABLED: '1'
+  NEXT_TELEMETRY_DISABLED: '1'
 
 jobs:
-  quality:
+  code:
+    name: Code (rich)
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
-          bun-version: 1.4.0
-
-      - name: Install dependencies
+          node-version: '24.x'
+          package-manager-cache: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version: '1.4.2'
+      - name: Frozen dependency install
         run: bun install --frozen-lockfile
+      - name: Validate code
+        run: node scripts/quality.mjs code
 
-      # lint + format, in parallel.
-      - name: Check
-        run: bun run check:ci
+  security:
+    name: Dependency security
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '24.x'
+          package-manager-cache: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version: '1.4.2'
+      - name: Frozen dependency install
+        run: bun install --frozen-lockfile
+      - name: Validate security
+        run: node scripts/quality.mjs security
 
-      - name: Typecheck
-        run: bun run typecheck
-
-      - name: Test
-        run: bun run test
-
-      - name: Build
-        run: bun run build
-
-      # The library is published from this package, so the artifact consumers
-      # actually install gets built too.
-      - name: Build library
-        run: bun run build:lib
-
-      # Fails the build on a high or critical advisory. The release-age gate in
-      # bunfig slows a malicious package down; this is what notices a known one.
-      - name: Audit
-        run: bun run audit
+  quality:
+    name: Quality Gates
+    if: always() && github.event_name != 'schedule'
+    needs: [code, security]
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require every validation stage
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          node --input-type=module <<'JS'
+          import { appendFileSync } from 'node:fs';
+          const results = JSON.parse(process.env.RESULTS);
+          for (const [name, job] of Object.entries(results)) {
+            appendFileSync(process.env.GITHUB_STEP_SUMMARY, `- ${name}: ${job.result}\n`);
+          }
+          if (Object.values(results).some(job => job.result !== 'success')) process.exit(1);
+          JS
 
   publish:
     name: Publish to npm
+    concurrency:
+      group: npm-publish
+      cancel-in-progress: false
     needs: quality
     runs-on: ubuntu-latest
     if: >-
@@ -66,7 +102,7 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
-          bun-version: 1.4.0
+          bun-version: 1.4.2
 
       # npm drives the publish: trusted publishing is an npm CLI feature and
       # `bun publish` has no OIDC support.
