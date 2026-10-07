@@ -1,6 +1,6 @@
 {
   "name": "@mrbrunowolff/react-web-components",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Self-contained shadcn/ui components wrapped as Web Components for use in any framework - no external CSS dependencies required",
   "keywords": [
     "bun",
@@ -25,50 +25,103 @@
     "directory": "packages/react-web-components"
   },
   "files": [
-    "dist/web-components",
-    "dist/components",
-    "dist/lib",
-    "dist/index.d.ts",
+    "dist",
     "src"
   ],
   "type": "module",
-  "main": "./src/index.ts",
-  "module": "./src/index.ts",
-  "types": "./src/index.ts",
+  "sideEffects": [
+    "**/*.css",
+    "./dist/index.*",
+    "./dist/components/wc-ui/**",
+    "./dist/web-components/**"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts",
-      "require": "./src/index.ts",
-      "default": "./src/index.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
     },
-    "./src/*": {
-      "types": "./src/*",
-      "import": "./src/*",
-      "require": "./src/*",
-      "default": "./src/*"
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "import": "./dist/react.js",
+      "require": "./dist/react.cjs",
+      "default": "./dist/react.js"
+    },
+    "./wc": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/web-components/react-web-components.es.js",
+      "require": "./dist/web-components/react-web-components.umd.cjs",
+      "default": "./dist/web-components/react-web-components.es.js"
+    },
+    "./wc/peer": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    },
+    "./components/*.tsx": {
+      "types": "./dist/components/*.d.ts",
+      "import": "./dist/components/*.js",
+      "require": "./dist/components/*.cjs",
+      "default": "./dist/components/*.js"
+    },
+    "./components/*.ts": {
+      "types": "./dist/components/*.d.ts",
+      "import": "./dist/components/*.js",
+      "require": "./dist/components/*.cjs",
+      "default": "./dist/components/*.js"
     },
     "./components/*": {
-      "types": "./src/components/*",
-      "import": "./src/components/*",
-      "require": "./src/components/*",
-      "default": "./src/components/*"
+      "types": "./dist/components/*.d.ts",
+      "import": "./dist/components/*.js",
+      "require": "./dist/components/*.cjs",
+      "default": "./dist/components/*.js"
     },
-    "./styles/flexlayout-light.css": "./src/styles/flexlayout-light.css",
-    "./styles/flexlayout-dark.css": "./src/styles/flexlayout-dark.css",
-    "./styles/flexlayout.css": "./src/styles/flexlayout.css"
+    "./src/*.tsx": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.js",
+      "require": "./dist/*.cjs",
+      "default": "./dist/*.js"
+    },
+    "./src/*.ts": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.js",
+      "require": "./dist/*.cjs",
+      "default": "./dist/*.js"
+    },
+    "./src/*": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.js",
+      "require": "./dist/*.cjs",
+      "default": "./dist/*.js"
+    },
+    "./theme.css": "./dist/theme.css",
+    "./styles/flexlayout-light.css": "./dist/styles/flexlayout-light.css",
+    "./styles/flexlayout-dark.css": "./dist/styles/flexlayout-dark.css",
+    "./styles/flexlayout.css": "./dist/styles/flexlayout.css",
+    "./package.json": "./package.json",
+    "./src/styles.js": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    }
   },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "dev": "vite",
-    "build": "bun run clean && tsc -b && vite build",
+    "build": "bun run build:lib",
     "build:wc": "vite build --config vite.config.wc.ts",
     "build:types": "tsc --project tsconfig.lib.json",
     "typecheck": "tsc -b --noEmit",
-    "build:lib": "bun run clean && bun run build:wc && bun run build:types",
-    "prepare-package": "bun scripts/prepare-package.js",
+    "build:lib": "bun run clean && bun run build:react && bun run build:wc && bun run build:theme && bun run build:types && node scripts/finalize-package.mjs && bun run check:exports",
+    "prepare-package": "bun run build:lib",
     "lint": "oxlint",
     "preview": "vite preview",
     "showcase": "bun run build:lib && vite --config vite.config.showcase.ts",
@@ -77,7 +130,10 @@
     "test:coverage": "vitest run --coverage",
     "prepublishOnly": "bun run lint && bun run test && bun run build:lib",
     "clean": "rm -rf dist dist-lib",
-    "clean:source-dts": "find src -name '*.d.ts' -type f -delete"
+    "clean:source-dts": "find src -name '*.d.ts' -type f -delete",
+    "build:react": "vite build --config vite.config.lib.ts && vite build --config vite.config.lib.ts --mode commonjs",
+    "build:theme": "vite build --config vite.config.theme.ts",
+    "check:exports": "node scripts/check-exports.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
@@ -108,8 +164,6 @@
     "@radix-ui/react-toggle": "^1.1.18",
     "@radix-ui/react-toggle-group": "^1.1.19",
     "@radix-ui/react-tooltip": "^1.2.16",
-    "@tailwindcss/vite": "^4.3.3",
-    "autoprefixer": "^10.6.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -119,21 +173,17 @@
     "input-otp": "^1.5.0",
     "lucide-react": "^1.51.0",
     "next-themes": "^0.4.6",
-    "postcss": "^8.5.28",
-    "react": "^19.3.0",
     "react-day-picker": "^10.0.2",
-    "react-dom": "^19.3.0",
     "react-hook-form": "^7.89.0",
     "react-resizable-panels": "^4.14.2",
     "recharts": "^3.10.1",
     "sonner": "^2.0.8",
     "tailwind-merge": "^3.7.0",
-    "tailwindcss": "^4.3.3",
-    "tw-animate-css": "^1.4.0",
     "vaul": "^1.1.2",
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^26.6.4",
@@ -141,14 +191,23 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react-swc": "^4.3.3",
     "@vitest/coverage-v8": "^5.0.3",
+    "autoprefixer": "^10.6.1",
     "jsdom": "^30.1.1",
+    "postcss": "^8.5.28",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.3",
+    "tw-animate-css": "^1.4.0",
     "typescript": "^7.0.2",
     "vite": "^8.3.2",
     "vitest": "^5.0.3"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
   "engines": {
     "bun": ">=1.0.0"
   },
-  "packageManager": "bun@1.4.0"
+  "packageManager": "bun@1.4.2"
 }

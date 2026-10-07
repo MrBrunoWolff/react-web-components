@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Button } from '../ui/button';
+import { BrowserElement } from '../../lib/browser-element';
+import { installWebComponentStyles } from '../../lib/wc-styles';
 
-class ButtonWebComponent extends HTMLElement {
+class ButtonWebComponent extends BrowserElement {
   private root: ReturnType<typeof createRoot> | null = null;
   private content = '';
 
@@ -11,6 +13,7 @@ class ButtonWebComponent extends HTMLElement {
   }
 
   connectedCallback() {
+    installWebComponentStyles();
     if (!this.root) {
       this.content = this.textContent || '';
       this.style.display = 'inline-flex';

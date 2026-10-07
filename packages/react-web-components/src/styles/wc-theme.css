@@ -19,3 +19,9 @@ ui-button {
   display: inline-flex;
   vertical-align: middle;
 }
+
+ui-flexlayout {
+  display: block;
+  width: 100%;
+  min-height: 400px;
+}

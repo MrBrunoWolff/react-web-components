@@ -46,3 +46,7 @@ playwright-report
 .temp
 .cache
 .turbo
+
+# Published documentation copied from the repository root
+/packages/react-web-components/README.md
+/packages/react-web-components/LICENSE

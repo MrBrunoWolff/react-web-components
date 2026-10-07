@@ -12,7 +12,7 @@ stages to succeed; cancelled or unexpectedly skipped stages fail. Scheduled secu
 check the default-branch baseline on weekdays. Dependency update PRs retain the three-day
 release-age policy; review overrides and existing advisory exceptions instead of broadening them.
 
-The explicit commands are in `quality.config.json`. Rich checks include the applicable static checks, tests, build and diagnostics. Live model/server tests remain opt-in.
+The explicit commands are in `quality.config.json`. Rich checks include the applicable static checks, tests, build, packed consumer browser checks and diagnostics. Live model/server tests remain opt-in.
 
 Run individual stages with `bun run check:code`, `bun run check:security`. Production publishing remains a separate job after Quality Gates.
 
