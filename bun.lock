@@ -5,6 +5,7 @@
     "": {
       "name": "react-web-components",
       "devDependencies": {
+        "@playwright/test": "^1.63.0",
         "oxfmt": "^0.71.0",
         "oxlint": "^1.86.0",
         "typescript": "^7.0.2",
@@ -12,7 +13,7 @@
     },
     "packages/react-web-components": {
       "name": "@mrbrunowolff/react-web-components",
-      "version": "1.0.1",
+      "version": "1.1.0",
       "dependencies": {
         "@hookform/resolvers": "^5.9.1",
         "@r2wc/react-to-web-component": "^2.1.1",
@@ -42,8 +43,6 @@
         "@radix-ui/react-toggle": "^1.1.18",
         "@radix-ui/react-toggle-group": "^1.1.19",
         "@radix-ui/react-tooltip": "^1.2.16",
-        "@tailwindcss/vite": "^4.3.3",
-        "autoprefixer": "^10.6.1",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "cmdk": "^1.1.1",
@@ -53,21 +52,17 @@
         "input-otp": "^1.5.0",
         "lucide-react": "^1.51.0",
         "next-themes": "^0.4.6",
-        "postcss": "^8.5.28",
-        "react": "^19.3.0",
         "react-day-picker": "^10.0.2",
-        "react-dom": "^19.3.0",
         "react-hook-form": "^7.89.0",
         "react-resizable-panels": "^4.14.2",
         "recharts": "^3.10.1",
         "sonner": "^2.0.8",
         "tailwind-merge": "^3.7.0",
-        "tailwindcss": "^4.3.3",
-        "tw-animate-css": "^1.4.0",
         "vaul": "^1.1.2",
         "zod": "^4.6.5",
       },
       "devDependencies": {
+        "@tailwindcss/vite": "^4.3.3",
         "@testing-library/jest-dom": "^7.0.1",
         "@testing-library/react": "^16.3.3",
         "@types/node": "^26.6.4",
@@ -75,10 +70,20 @@
         "@types/react-dom": "^19.3.0",
         "@vitejs/plugin-react-swc": "^4.3.3",
         "@vitest/coverage-v8": "^5.0.3",
+        "autoprefixer": "^10.6.1",
         "jsdom": "^30.1.1",
+        "postcss": "^8.5.28",
+        "react": "^19.3.0",
+        "react-dom": "^19.3.0",
+        "tailwindcss": "^4.3.3",
+        "tw-animate-css": "^1.4.0",
         "typescript": "^7.0.2",
         "vite": "^8.3.2",
         "vitest": "^5.0.3",
+      },
+      "peerDependencies": {
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0",
       },
     },
     "packages/showcase-react": {
@@ -253,6 +258,8 @@
     "@oxlint/binding-win32-ia32-msvc": ["@oxlint/binding-win32-ia32-msvc@1.86.0", "", { "os": "win32", "cpu": "ia32" }, "sha512-a47ga7EKVfMU8rO0i1m3mGwfNRj3FhQyt1d/ukO/E9u1HHF3KpR3tyb3VhuJBGEVPF8uR4exSyHUyx7xbE+uxw=="],
 
     "@oxlint/binding-win32-x64-msvc": ["@oxlint/binding-win32-x64-msvc@1.86.0", "", { "os": "win32", "cpu": "x64" }, "sha512-az4dzifCRzES1crwu6pDFXzJTIanrdxXFL9TbiJWrx9LKcuacbR83aPvxDA1LKLNswi/RoqitC7Afcflhu3zBQ=="],
+
+    "@playwright/test": ["@playwright/test@1.63.0", "", { "dependencies": { "playwright": "1.63.0" }, "bin": { "playwright": "cli.js" } }, "sha512-oxMK4vllB9RK5NQ2l1pq1IfOf2AvnEuj/vYGDj0H2nMtmtZpKtCwt/l00GEO6xjGfpBNAvjovvYdCm50dRQkpQ=="],
 
     "@r2wc/core": ["@r2wc/core@1.3.1", "", {}, "sha512-x9nMthXsTjqr1alE+boX1Zuzqb6/oFi4wAOdWaWcWKcrwq9M/PATK74c3DFJfRnUOkYWPlsz0e4CsFBXJGStSA=="],
 
@@ -745,6 +752,10 @@
     "picocolors": ["picocolors@1.1.1", "", {}, "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA=="],
 
     "picomatch": ["picomatch@4.0.7", "", {}, "sha512-qcJu88Q2IWqJsDD529JKMdwGm/dvInW4HvQnRwiH9JtihJvzGOscDtHE3x1pBKeUOTysQ8kVmLnJ2kJu7yhcGA=="],
+
+    "playwright": ["playwright@1.63.0", "", { "dependencies": { "playwright-core": "1.63.0" }, "bin": { "playwright": "cli.js" } }, "sha512-+7ziBLidS4NaNCdt57SUDT+wYmmd5fmiQejUic/kb+YsYSCPyOOE9sebzMjNmQrsnNpDJqd4WHvV/8lfKfUDUg=="],
+
+    "playwright-core": ["playwright-core@1.63.0", "", { "bin": { "playwright-core": "cli.js" } }, "sha512-rYCsBF/M5HjUch52bbtVONEFjv6Xu8sm8h72dNlR5bzIE1fvC/bxgspzkjSfU+MweEMmPM8KJebG6nnyxo5mCg=="],
 
     "postcss": ["postcss@8.5.28", "", { "dependencies": { "nanoid": "^3.3.18", "picocolors": "^1.1.1", "source-map-js": "^1.2.1" } }, "sha512-RRuzqDtt5Y9h3quz5hWhK+TPnsmVs6WwSU6LkJMeY4HstUEDuYTG8UJSdawMRzmzAtV+KEoG8N3Qg2qLy5vM/A=="],
 

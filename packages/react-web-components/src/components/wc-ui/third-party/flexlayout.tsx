@@ -1,10 +1,11 @@
 import r2wc from '@r2wc/react-to-web-component';
 import type { IJsonModel } from 'flexlayout-react';
+import { useEffect } from 'react';
 import { FlexLayout } from '../../ui/third-party/flexlayout';
-
-// Note: We cannot import CSS as strings in type-only builds; inject minimal styles instead.
-const lightCss = `:host{display:block}.flexlayout__layout{inset:0}`;
-const darkCss = lightCss;
+import { BrowserElement } from '../../../lib/browser-element';
+import { installWebComponentStyles } from '../../../lib/wc-styles';
+import lightCss from '../../../styles/flexlayout-light.css?inline';
+import darkCss from '../../../styles/flexlayout-dark.css?inline';
 
 type FlexLayoutWrapperProps = {
   modelJson: IJsonModel;
@@ -17,10 +18,9 @@ const FlexLayoutWrapper = ({
   className,
   theme = 'light',
 }: FlexLayoutWrapperProps) => {
+  useEffect(installWebComponentStyles, []);
   const css = theme === 'dark' ? darkCss : lightCss;
-  const mergedClass = className
-    ? `${className} flexlayout-host`
-    : 'flexlayout-host';
+  const mergedClass = `flexlayout-host flexlayout-theme-${theme} ${className || ''}`;
   return (
     <div
       className={mergedClass}
@@ -53,15 +53,18 @@ const FlexLayoutWrapper = ({
   );
 };
 
-export const FlexLayoutWebComponent = r2wc(FlexLayoutWrapper, {
-  props: {
-    modelJson: 'json',
-    className: 'string',
-    theme: 'string',
-  },
-  // Note: render in light DOM so global CSS can style it in the showcase
-  shadow: undefined,
-});
+export const FlexLayoutWebComponent =
+  typeof HTMLElement === 'undefined'
+    ? BrowserElement
+    : r2wc(FlexLayoutWrapper, {
+        props: {
+          modelJson: 'json',
+          className: 'string',
+          theme: 'string',
+        },
+        // Note: render in light DOM so global CSS can style it in the showcase
+        shadow: undefined,
+      });
 
 if (typeof window !== 'undefined' && typeof customElements !== 'undefined') {
   if (!customElements.get('ui-flexlayout')) {

@@ -8,7 +8,9 @@
       ["bun", "run", "typecheck"],
       ["bun", "run", "test"],
       ["bun", "run", "build"],
-      ["bun", "run", "build:lib"]
+      ["bun", "run", "build:lib"],
+      ["playwright-install"],
+      ["bun", "run", "test:package"]
     ],
     "security": [["bun", "run", "audit"]]
   }
