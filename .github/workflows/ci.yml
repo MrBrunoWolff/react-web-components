@@ -38,6 +38,8 @@ jobs:
           bun-version: '1.4.2'
       - name: Frozen dependency install
         run: bun install --frozen-lockfile
+      - name: Test npm publishing behavior
+        run: node --test scripts/publish-npm.test.mjs
       - name: Validate code
         run: node scripts/quality.mjs code
 
@@ -81,6 +83,7 @@ jobs:
 
   publish:
     name: Publish to npm
+    timeout-minutes: 45
     concurrency:
       group: npm-publish
       cancel-in-progress: false
@@ -131,29 +134,4 @@ jobs:
       # (which is private and named ...-monorepo).
       - name: Publish to npm (if version changed)
         working-directory: packages/react-web-components
-        run: |
-          PACKAGE_VERSION=$(node -p "require('./package.json').version")
-          PACKAGE_NAME=$(node -p "require('./package.json').name")
-
-          if ! npm view "$PACKAGE_NAME" version >/dev/null 2>&1; then
-            echo "$PACKAGE_NAME does not exist on npm yet."
-            echo "Publish once manually, then configure the trusted publisher."
-            exit 0
-          fi
-
-          if npm view "$PACKAGE_NAME@$PACKAGE_VERSION" version >/dev/null 2>&1; then
-            echo "Version $PACKAGE_VERSION already exists, skipping publish"
-            exit 0
-          fi
-
-          echo "Publishing $PACKAGE_NAME@$PACKAGE_VERSION via trusted publishing"
-
-          # A failure here is a real failure. Auth errors used to be tolerated
-          # while trusted publishers were still being set up, but that made a
-          # green run mean "nothing went wrong" rather than "published" — the
-          # wrong signal for a release pipeline. If this fails with E404 or
-          # EOTP, the trusted publisher for this package is missing or its
-          # fields do not match: organization MrBrunoWolff, this repository,
-          # workflow ci.yml, environment empty.
-          npm publish
-          echo "Published $PACKAGE_NAME@$PACKAGE_VERSION"
+        run: node ../../scripts/publish-npm.mjs
