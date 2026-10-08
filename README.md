@@ -1,407 +1,71 @@
-# React Web Components Monorepo
+# React Web Components
 
-Self-contained shadcn/ui components wrapped as Web Components for use in any framework - no external CSS dependencies required.
+Components based on [shadcn/ui](https://ui.shadcn.com/), available as React components or custom elements with bundled styles, including buttons and FlexLayout docking layouts.
 
 [![npm](https://img.shields.io/npm/v/@mrbrunowolff/react-web-components?style=flat-square)](https://www.npmjs.com/package/@mrbrunowolff/react-web-components)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
 
-## 📁 Monorepo Structure
+## Quick start
 
-This monorepo contains three packages:
+For a browser app using a bundler:
 
-- **`packages/react-web-components`** - The main component library
-- **`packages/showcase-react`** - React showcase using Vite + React
-- **`packages/showcase-wc`** - Pure Web Components showcase using Lit
-
-## ✨ Features
-
-### Core Features
-- **Self-contained components**: No need for Tailwind CSS setup in your consuming app
-- **Pixel-perfect styling**: All components look exactly like shadcn/ui reference
-- **Dual usage**: Use as React components OR Web Components
-- **Framework agnostic**: Works with Vue, Angular, vanilla HTML, or any framework
-- **TypeScript support**: Full type safety for React usage
-- **Organized structure**: Clean separation between React components (`ui/`) and Web Components (`wc-ui/`)
-- **Theming support**: CSS variables for easy customization
-
-### Third-party Integrations
-- **FlexLayout included**: Advanced docking layout manager for complex UIs
-- **Third-party components**: Dedicated folders for external library integrations
-
-## 🚀 Quick Start
-
-### View Live Showcases
-
-Clone the repository and start the showcases:
-
-```bash
-# Install dependencies for all packages (Bun workspaces handles everything!)
-bun install
-
-# Start React showcase (Vite + React)
-bun run showcase:react
-# Visit http://localhost:3000
-
-# Start Web Components showcase (Lit)
-bun run showcase:wc  
-# Visit http://localhost:3001
+```sh
+npm install @mrbrunowolff/react-web-components
 ```
 
-### Build Everything
+Register the standalone Web Components:
 
-```bash
-# Build all packages
-bun run build
-
-# Build only the main library
-bun run build:lib
+```js
+import "@mrbrunowolff/react-web-components/wc";
 ```
 
-## 📦 Installation
+Then use their tags in HTML:
 
-```bash
-bun add @mrbrunowolff/react-web-components
-```
-
-The `/wc` standalone bundle includes React and styles for plain HTML and other frameworks. React applications should install React 19 and React DOM 19 and use `/react` for components or `/wc/peer` for custom elements sharing the app's React installation.
-
-The monorepo root is private; only the component library is published. All JavaScript entry points resolve to compiled ESM and CommonJS files with declarations. Existing component and `src` subpaths remain available. Frontend TypeScript consumers should use `moduleResolution: "Bundler"`; FlexLayout's upstream declarations currently use extensionless imports that prevent strict NodeNext checking.
-
-## 🎯 Usage
-
-### Web Components (Recommended)
-
-For any frontend framework or vanilla HTML/JS:
-
-#### Vanilla HTML
 ```html
-<!DOCTYPE html>
-<html>
-<head>
-
-</head>
-<body>
-  <!-- Button examples -->
-  <ui-button variant="default">Click me</ui-button>
-  <ui-button variant="secondary" size="lg">Large Secondary</ui-button>
-  <ui-button variant="destructive" disabled>Disabled Delete</ui-button>
-  
-  <!-- FlexLayout example -->
-  <ui-flexlayout id="my-layout" theme="light"></ui-flexlayout>
-  
-  <script type="module">
-    import "https://unpkg.com/@mrbrunowolff/react-web-components@1.1.0/dist/web-components/react-web-components.es.js";
-    // Configure after custom elements have been registered
-    const layout = document.getElementById('my-layout');
-    layout.modelJson = {
-      global: { tabEnableClose: true },
-      layout: {
-        type: "row",
-        children: [{
-          type: "tabset",
-          children: [{
-            type: "tab",
-            name: "My Panel",
-            component: "panel"
-          }]
-        }]
-      }
-    };
-  </script>
-</body>
-</html>
+<ui-button variant="default">Save</ui-button>
+<ui-button variant="secondary" size="lg">Cancel</ui-button>
 ```
 
-#### React/Next.js/Vite
-```tsx
-'use client'
-import '@mrbrunowolff/react-web-components/wc/peer'
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'ui-button': any
-      'ui-flexlayout': any
-    }
-  }
-}
-
-export default function App() {
-  return (
-    <div>
-      <ui-button variant="default">React with WC</ui-button>
-      <ui-flexlayout theme="dark" />
-    </div>
-  )
-}
-```
-
-#### Vue 3
-```vue
-<template>
-  <div>
-    <ui-button variant="secondary" @click="handleClick">Vue Button</ui-button>
-    <ui-flexlayout ref="layout" theme="light" />
-  </div>
-</template>
-
-<script setup>
-import '@mrbrunowolff/react-web-components/wc'
-import { ref, onMounted } from 'vue'
-
-const layout = ref()
-
-const handleClick = () => {
-  console.log('Button clicked!')
-}
-
-onMounted(() => {
-  layout.value.modelJson = {
-    // your layout config
-  }
-})
-</script>
-```
-
-#### Angular
-```typescript
-// app.component.ts
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import '@mrbrunowolff/react-web-components/wc'
-
-@Component({
-  selector: 'app-root',
-  template: `
-    <ui-button variant="outline" (click)="onClick()">Angular Button</ui-button>
-    <ui-flexlayout #layout theme="dark"></ui-flexlayout>
-  `,
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
-})
-export class AppComponent {
-  onClick() {
-    console.log('Clicked!')
-  }
-}
-```
-
-### React Components
-
-For React applications that want to use the components directly:
+The standalone entry bundles React for plain browser use. In a React app, use `@mrbrunowolff/react-web-components/wc/peer` to reuse the app’s React instance, or import React components directly:
 
 ```tsx
-import { Button } from '@mrbrunowolff/react-web-components/react'
-import '@mrbrunowolff/react-web-components/theme.css'
-import { FlexLayout } from '@mrbrunowolff/react-web-components/components/ui/third-party/flexlayout'
-import '@mrbrunowolff/react-web-components/styles/flexlayout-light.css'
+import { Button } from "@mrbrunowolff/react-web-components/react";
+import "@mrbrunowolff/react-web-components/theme.css";
 
-export default function App() {
-  const layoutModel = {
-    global: { tabEnableClose: true },
-    layout: {
-      type: "row", 
-      children: [{
-        type: "tabset",
-        children: [{
-          type: "tab",
-          name: "Panel 1",
-          component: "text"
-        }]
-      }]
-    }
-  }
-
-  const factory = (node) => {
-    return <div>Panel content: {node.getName()}</div>
-  }
-
-  return (
-    <div>
-      <Button variant="default" size="lg">
-        React Button
-      </Button>
-      
-      <FlexLayout 
-        modelJson={layoutModel}
-        factory={factory}
-      />
-    </div>
-  )
+export function SaveButton() {
+  return <Button variant="default">Save</Button>;
 }
 ```
 
-## 🧩 Available Components
+Direct React usage requires compatible `react` and `react-dom` peer dependencies. See the [component guide](https://github.com/MrBrunoWolff/react-web-components/blob/main/docs/components.md) for CDN usage, attributes, layout properties and themes.
 
-The library is organized into two main categories:
+## Features
 
-- **React Components** (`ui/`): For direct React usage
-- **Web Components** (`wc-ui/`): For framework-agnostic usage
+- Web Components for browser apps and React exports for direct React use.
+- Bundled custom-element styles and an explicit theme stylesheet for React.
+- Button variants, sizes and disabled state.
+- FlexLayout docking with light/dark themes and configurable panels.
+- TypeScript declarations and ESM/CommonJS package entry points.
 
-Both categories include:
-- **Core components**: Standard UI components (Button, etc.)
-- **Third-party components**: External library integrations (FlexLayout)
+## Scripts
 
-### Button
+For development, use the Bun version declared in the root package manifest, clone the repository and run `bun install --frozen-lockfile`. Commands below run from the workspace root:
 
-A versatile button component with multiple variants and sizes.
+| Command                  | Description                                         |
+| ------------------------ | --------------------------------------------------- |
+| `bun run showcase:react` | Start the React showcase                            |
+| `bun run showcase:wc`    | Start the Web Components showcase                   |
+| `bun run build:lib`      | Build the publishable library                       |
+| `bun run typecheck`      | Check workspace types                               |
+| `bun run test`           | Run workspace tests                                 |
+| `bun run check:ci`       | Run code, build, security and packed-package checks |
 
-**Web Component**: `<ui-button>`
+## Development
 
-**Props/Attributes**:
-- `variant`: `"default" | "secondary" | "destructive" | "outline" | "ghost" | "link"`
-- `size`: `"default" | "sm" | "lg" | "icon"`
-- `disabled`: `boolean`
-- `class`/`className`: `string`
+The workspace contains the library and two showcase apps. See the [development guide](https://github.com/MrBrunoWolff/react-web-components/blob/main/docs/development.md) for structure, browser validation and contributions, and [QUALITY.md](https://github.com/MrBrunoWolff/react-web-components/blob/main/QUALITY.md) for the complete validation contract.
 
-**Events**: Dispatches standard `click` events
+Package builds copy this README into the published library. Documentation links use GitHub destinations so they also work from the npm package.
 
-### FlexLayout
+## License
 
-A powerful docking layout manager for complex interfaces.
-
-**Web Component**: `<ui-flexlayout>`
-
-**Props/Attributes**:
-- `theme`: `"light" | "dark"`
-- `modelJson`: Layout configuration object (set via JavaScript property)
-
-**React Props** (additional):
-- `factory`: `(node: TabNode) => React.ReactNode` - Function to render tab content
-- `onAction`: `(action: Action) => void` - Handle layout actions
-
-## 🎨 Theming
-
-Components use CSS variables for easy theming:
-
-```css
-:root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  --primary: 222.2 47.4% 11.2%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222.2 84% 4.9%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96%;
-  --accent-foreground: 222.2 84% 4.9%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 222.2 84% 4.9%;
-  --radius: 0.5rem;
-}
-
-/* Dark theme */
-[data-theme="dark"] {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  /* ... other dark theme variables */
-}
-```
-
-Apply themes by setting the `data-theme` attribute on a parent element or use the `theme` attribute on individual components.
-
-## 🛠 Development
-
-This project uses **Bun** as the package manager and runtime:
-
-```bash
-# Install dependencies for all packages (Bun workspaces handles everything!)
-bun install
-
-# Start React showcase (Vite + React)
-bun run showcase:react
-
-# Start Web Components showcase (Lit)
-bun run showcase:wc
-
-# Build all packages
-bun run build
-
-# Build only the main library
-bun run build:lib
-
-# Run tests across all packages
-bun run test
-
-# Format and lint all packages with oxc (oxlint + oxfmt)
-bun run format     # Format all files with oxfmt
-bun run lint       # Lint with oxlint
-bun run lint:fix   # Lint and auto-fix issues with oxlint
-bun run check      # Lint --fix + format everything
-```
-
-### Root Scripts
-
-- `bun install` - Install dependencies for all packages (Bun workspaces handles everything automatically!)
-- `bun run dev` - Start development servers for all packages
-- `bun run build` - Build all packages
-- `bun run build:lib` - Build the main component library
-- `bun run showcase:react` - Start React showcase (port 3000)
-- `bun run showcase:wc` - Start Web Components showcase (port 3001)
-- `bun run format` - Format all files with oxfmt
-- `bun run format:check` - Check formatting with oxfmt (no writes)
-- `bun run typecheck` - Typecheck every workspace
-- `bun run test` - Run the test suites in every workspace
-- `bun run audit` - Fail on a dependency with a high or critical advisory
-- `bun run licenses` - List production dependencies grouped by licence
-- `bun run lint` - Lint with oxlint
-- `bun run lint:fix` - Lint and auto-fix issues with oxlint
-- `bun run check` - Lint --fix + format everything
-- `bun run check:ci` - Lint + format check (CI, no writes)
-- `bun run test` - Test all packages
-- `bun run clean` - Clean all build artifacts
-
-### Package Structure
-
-```
-packages/
-├── react-web-components/    # Main component library
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── ui/          # React UI components (shadcn/ui)
-│   │   │   │   ├── third-party/  # Third-party React components (FlexLayout)
-│   │   │   │   ├── button.tsx
-│   │   │   │   └── [other shadcn components]...
-│   │   │   ├── wc-ui/       # Web Components
-│   │   │   │   ├── third-party/  # Third-party Web Components
-│   │   │   │   │   └── flexlayout.tsx
-│   │   │   │   ├── button.tsx
-│   │   │   │   └── index.ts
-│   │   │   └── web-components.ts  # WC exports
-│   │   ├── styles/          # CSS files (FlexLayout themes)
-│   │   └── index.ts         # Main export
-│   ├── showcase/            # Legacy showcase (being deprecated)
-│   └── tests/               # Test files
-├── showcase-react/          # Vite + React showcase
-│   └── src/                 # React app source
-└── showcase-wc/             # Lit Web Components showcase
-    └── src/                 # Lit components and main
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes in the appropriate package
-4. Add tests for new functionality
-5. Run the test suite: `bun run test`
-6. Test both showcases: `bun run showcase:react` and `bun run showcase:wc`
-7. Submit a pull request
-
-## 📜 License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
-## 🔗 Links
-
-- [shadcn/ui](https://ui.shadcn.com/) - Original component library
-- [FlexLayout](https://github.com/caplin/FlexLayout) - Advanced layout manager
-- [Vite](https://vitejs.dev/) - React showcase build tool
-- [Lit](https://lit.dev/) - Web Components showcase framework
-- [Bun](https://bun.sh/) - Fast JavaScript runtime and package manager
-- [oxc](https://oxc.rs/) - Fast linter (oxlint) and formatter (oxfmt) for web projects
-### Packed package validation
-
-`bun run check:ci` runs lint, formatting, types, unit tests, builds, audit, and real packed-package checks. Before running locally, install Chromium with `bunx playwright install chromium`. The package checks exercise Node ESM/CommonJS imports, React server rendering, strict frontend declarations, and a plain HTML browser with button interactions and simultaneous FlexLayout themes.
+MIT — see [LICENSE](LICENSE).
