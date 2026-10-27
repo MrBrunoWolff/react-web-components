@@ -24,7 +24,7 @@ For any frontend framework or vanilla HTML/JS:
     <ui-flexlayout id="my-layout" theme="light"></ui-flexlayout>
 
     <script type="module">
-      import "https://unpkg.com/@mrbrunowolff/react-web-components@1.1.0/dist/web-components/react-web-components.es.js";
+      import "https://unpkg.com/@mrbrunowolff/react-web-components@1.1.1/dist/web-components/react-web-components.es.js";
       // Configure after custom elements have been registered
       const layout = document.getElementById("my-layout");
       layout.modelJson = {
